@@ -984,19 +984,36 @@ const TaskManager = (() => {
     const nextWeek = new Date(now); nextWeek.setDate(nextWeek.getDate() + 7);
     const nextWeekStr = nextWeek.toISOString().slice(0, 10);
 
-    const base = {
-      done: false, date: today, description: '', dueTime: '', category: '',
-      createdAt: todayISO, subtasks: [], tags: [], project: 'Geral',
-      recurrence: '', comments: [], attachments: [], status: 'todo',
-      dependencies: [], timeSpent: 0, pinned: false, estimate: 0,
-      reminders: [], autoEscalated: false, originalPriority: ''
-    };
+    function makeTask(text, priority, opts) {
+      return Object.assign({
+        text: text,
+        priority: priority,
+        done: false,
+        date: today,
+        description: '',
+        dueDate: '',
+        dueTime: '',
+        category: '',
+        createdAt: todayISO,
+        subtasks: [],
+        tags: [],
+        project: 'Geral',
+        recurrence: '',
+        comments: [],
+        attachments: [],
+        status: 'todo',
+        dependencies: [],
+        timeSpent: 0,
+        pinned: false,
+        estimate: 0,
+        reminders: [],
+        autoEscalated: false,
+        originalPriority: ''
+      }, opts || {});
+    }
 
     const defs = [
-      {
-        ...base,
-        text: '👋 Bem-vindo ao FCEUX Task Manager!',
-        priority: 'alta',
+      makeTask('👋 Bem-vindo ao FCEUX Task Manager!', 'alta', {
         pinned: true,
         description: 'Este é seu gerenciador de tarefas com 115+ features! Explore os botões da toolbar, teste o Pomodoro 🍅, e clique no mascote PIXEL 🤖',
         subtasks: [
@@ -1006,53 +1023,36 @@ const TaskManager = (() => {
           { text: 'Clicar no mascote PIXEL 3 vezes', done: false },
           { text: 'Abrir as configurações ⚙️', done: false }
         ],
-        tags: ['tutorial', 'inicio'],
-        dueDate: ''
-      },
-      {
-        ...base,
-        text: '🎯 Experimente o Modo Foco',
-        priority: 'media',
+        tags: ['tutorial', 'inicio']
+      }),
+      makeTask('🎯 Experimente o Modo Foco', 'media', {
         description: 'Selecione esta tarefa e clique em 🎯 FOCO na toolbar. Tela minimalista pra concentrar!',
         category: 'estudo',
         dueDate: tomorrowStr
-      },
-      {
-        ...base,
-        text: '🍅 Teste o Pomodoro Timer',
-        priority: 'media',
+      }),
+      makeTask('🍅 Teste o Pomodoro Timer', 'media', {
         description: 'Clique em 🍅 POMO na toolbar. 25 min de foco → 5 min de pausa. A cada 4 pomos, pausa longa!',
         category: 'estudo',
         dueDate: tomorrowStr,
         estimate: 25
-      },
-      {
-        ...base,
-        text: '⌨️ Aprenda os atalhos do teclado',
-        priority: 'baixa',
+      }),
+      makeTask('⌨️ Aprenda os atalhos do teclado', 'baixa', {
         description: 'F1 = Help | / = Comandos | Ctrl+N = Tarefa rápida | ↑↓ = Navegar | Espaço = Completar',
         category: 'estudo',
         tags: ['atalhos'],
         dueDate: nextWeekStr
-      },
-      {
-        ...base,
-        text: '🤖 Conheça o PIXEL, seu mascote!',
-        priority: 'baixa',
+      }),
+      makeTask('🤖 Conheça o PIXEL, seu mascote!', 'baixa', {
         description: '1 clique = frase | 3 cliques = personalizar | 10 cliques rápidos = mini-game secreto! Ele reage a tudo que você faz.',
         category: 'pessoal',
-        tags: ['mascote', 'diversão'],
-        dueDate: ''
-      },
-      {
-        ...base,
-        text: '📋 Tente a linguagem natural',
-        priority: 'media',
+        tags: ['mascote', 'diversão']
+      }),
+      makeTask('📋 Tente a linguagem natural', 'media', {
         description: 'No campo >> digite: "estudar react amanhã 14h alta estudo" — o app detecta data, hora, prioridade e categoria automaticamente!',
         category: 'estudo',
         dueDate: tomorrowStr,
         estimate: 10
-      }
+      })
     ];
 
     for (const t of defs) await TaskDB.add(t);
