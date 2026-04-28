@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FCEUX Task Manager v2.6.6</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAATtJREFUWEftlrENwjAQRf8FKBiACRiAAViAAViAAViAAViAEVgACigooIACiiggEuXIke27c2LJBSlS+e7/e+c/O4n6fJKe8xcQ8CfAXwG+BRDyJsBrAZwPQiCfYjcyDwF7AJYAXE9RfALg5BTFZwBunnV7APsnxSbr6RmAu0cAnwVwA0DsK8UNgKUAF08BnNyj2AZwBcBj6e17AHYAPHkKYOcUxR6Ac3t0/xjAnlOAI3t03xjAiZLiGMDxKYpd+8cA9kkBBCKKcpZSzq2dAjj6AeDYHt1fAHBjim4fwLEpurMA58YUPVn/BHBgiu4qwKkhRT8HcGRI0Z8BXBhS9A0A+6bo/g6AMxfAef0QwLkLIN8aJBcB3LoA8q0F+HcBFF0AV/fo/gWAmwvg1h7d/wDwLYCHtuNnAD4DCPkGfB+kj9hLTvMAAAAASUVORK5CYII=" />
+</head>
+<body>
+
+  <!-- PARTÍCULAS DE FUNDO -->
+  <canvas class="particles-canvas" id="particlesCanvas"></canvas>
+
+  <!-- LOADING SCREEN -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="boot-header">FCEUX TASK MANAGER v2.6.6 BIOS</div>
+    <div class="boot-log" id="bootLog"></div>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">Carregando módulos...</div>
+    </div>
+    <div class="press-start" id="pressStart">[ PRESSIONE QUALQUER TECLA ]</div>
+  </div>
+
+  <!-- APP WRAPPER -->
+  <div class="app-wrapper" id="appWrapper">
+
+    <!-- Title Bar -->
+    <div class="title-bar">
+      <div class="title">
+        <div class="ico"></div>
+        FCEUX Task Manager v2.6.6
+      </div>
+      <div class="win-buttons">
+        <button class="win-btn" id="winMin" title="Minimizar">─</button>
+        <button class="win-btn" id="winMax" title="Maximizar">□</button>
+        <button class="win-btn close" id="winClose" title="Fechar">✕</button>
+      </div>
+    </div>
+
+    <!-- Menu Bar -->
+    <div class="menu-bar">
+      <div class="menu-item active" data-filter="all">File</div>
+      <div class="menu-item" data-filter="pending">Pendentes</div>
+      <div class="menu-item" data-filter="completed">Concluídas</div>
+      <div class="menu-item" data-filter="alta">Alta</div>
+      <div class="menu-item" data-filter="media">Média</div>
+      <div class="menu-item" data-filter="baixa">Baixa</div>
+      <div class="menu-item" data-action="help">Help</div>
+    </div>
+
+    <!-- Project Bar -->
+    <div class="project-bar" id="projectBar">
+      <div class="project-tab active" data-project="all">
+        📁 TODAS <span class="pt-count" id="ptCountAll">0</span>
+      </div>
+      <button class="project-add-btn" id="projectAddBtn">+ Projeto</button>
+    </div>
+
+    <!-- Meu Dia Bar -->
+    <div class="myday-bar visible" id="mydayBar">
+      <span class="myday-title">⭐ MEU DIA:</span>
+      <div class="myday-tasks" id="mydayTasks"></div>
+      <span class="myday-progress" id="mydayProgress">0/0</span>
+      <button class="myday-add-btn" id="mydayAddBtn">+ Adicionar</button>
+    </div>
+
+    <!-- XP Bar -->
+    <div class="xp-bar" id="xpBar">
+      <span class="xp-level" id="xpLevel">⭐ Nv.1 Aprendiz</span>
+      <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+      <span class="xp-text" id="xpText">0/100 XP</span>
+      <span class="xp-streak" id="xpStreak"></span>
+    </div>
+
+    <!-- Challenge Bar -->
+    <div class="challenge-bar" id="challengeBar">
+      <span class="challenge-icon" id="challengeIcon">🎯</span>
+      <div class="challenge-text">
+        <span class="ch-name" id="challengeName">Desafio do dia</span>
+        <span class="ch-reward" id="challengeReward">+50 XP</span>
+      </div>
+      <div class="challenge-progress-wrap">
+        <div class="challenge-progress-track">
+          <div class="challenge-progress-fill" id="challengeFill" style="width:0%"></div>
+        </div>
+        <span class="challenge-pct" id="challengePct">0%</span>
+      </div>
+      <span class="challenge-close" id="challengeClose">✕</span>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item">TOTAL: <span class="val" id="sTotal">0</span></div>
+      <div class="stat-item">PENDENTES: <span class="val" id="sPend">0</span></div>
+      <div class="stat-item">CONCLUÍDAS: <span class="val" id="sDone">0</span></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button class="toolbar-btn" id="btnExport" title="Exportar JSON">📤 EXPORT</button>
+      <button class="toolbar-btn" id="btnImport" title="Importar JSON">📥 IMPORT</button>
+      <input type="file" id="importInput" accept=".json" style="display:none" />
+      <button class="toolbar-btn" id="btnClearDone" title="Limpar Concluídas">🗑 CLEAR DONE</button>
+      <div class="toolbar-sep"></div>
+      <button class="toolbar-btn" id="btnStats" title="Estatísticas">📊 STATS</button>
+      <button class="toolbar-btn" id="btnHistory" title="Histórico">📜 HISTORY</button>
+      <button class="toolbar-btn" id="btnPomo" title="Pomodoro Timer">🍅 POMO</button>
+      <button class="toolbar-btn" id="btnNotepad" title="Bloco de Notas">📝 NOTES</button>
+      <button class="toolbar-btn" id="btnTemplates" title="Templates">📄 TEMPLATES</button>
+      <button class="toolbar-btn" id="btnHabits" title="Habit Tracker">🎯 HABITS</button>
+      <button class="toolbar-btn" id="btnArchive" title="Arquivo e Lixeira">📦 ARQUIVO</button>
+      <button class="toolbar-btn" id="btnConfig" title="Configurações">⚙️ CONFIG</button>
+      <button class="toolbar-btn" id="btnEisenhower" title="Matriz de Eisenhower">🎯 MATRIX</button>
+      <button class="toolbar-btn" id="btnCountdown" title="Countdown">⏳ COUNTDOWN</button>
+      <button class="toolbar-btn" id="btnBadges" title="Conquistas">🏆 BADGES</button>
+      <button class="toolbar-btn" id="btnAbout" title="Sobre">ℹ️ ABOUT</button>
+      <button class="toolbar-btn" id="btnPrint" title="Imprimir lista">🖨️ PRINT</button>
+      <button class="toolbar-btn" id="btnFocus" title="Modo Foco">🎯 FOCO</button>
+      <div class="toolbar-sep"></div>
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="list" title="Lista">☰</button>
+        <button class="view-btn" data-view="kanban" title="Kanban">▦</button>
+        <button class="view-btn" data-view="calendar" title="Calendário">📅</button>
+      </div>
+    </div>
+
+    <!-- Add Bar -->
+    <div class="add-bar">
+      <span class="prompt-symbol">&gt;&gt;</span>
+      <input type="text" id="taskInput" placeholder="Nova tarefa..." maxlength="100" />
+      <select id="priSel">
+        <option value="media">MEDIA</option>
+        <option value="alta">ALTA</option>
+        <option value="baixa">BAIXA</option>
+      </select>
+      <button class="btn-add" id="btnAdd">ADD</button>
+      <button class="btn-toggle-extra" id="btnToggleExtra">▼</button>
+    </div>
+    <div class="char-counter" id="charCounter">0/100</div>
+
+    <!-- NL Preview -->
+    <div class="nl-preview" id="nlPreview"></div>
+
+    <!-- Add Bar Extra -->
+    <div class="add-bar-extra" id="addBarExtra">
+      <span class="lbl">CAT:</span>
+      <select id="catSel">
+        <option value="">—</option>
+        <option value="trabalho">Trabalho</option>
+        <option value="pessoal">Pessoal</option>
+        <option value="estudo">Estudo</option>
+        <option value="manutenção">Manutenção</option>
+        <option value="reunião">Reunião</option>
+      </select>
+      <span class="lbl">VENCE:</span>
+      <input type="date" id="dueInput" />
+      <span class="lbl">ATÉ:</span>
+      <input type="time" id="dueTimeInput" />
+      <span class="lbl">RECORRÊNCIA:</span>
+      <select id="recurrenceSel">
+        <option value="">Nenhuma</option>
+        <option value="daily">Diária</option>
+        <option value="weekdays">Dias úteis</option>
+        <option value="weekly">Semanal</option>
+        <option value="biweekly">Quinzenal</option>
+        <option value="monthly">Mensal</option>
+      </select>
+      <span class="lbl">DESC:</span>
+      <input type="text" id="descInput" placeholder="Descrição..." />
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <span class="search-label">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar tarefas..." />
+    </div>
+
+    <!-- Sort Bar -->
+    <div class="sort-bar">
+      <span class="sort-label">ORDEM:</span>
+      <button class="sort-btn active" data-sort="priority">⚡Prioridade</button>
+      <button class="sort-btn" data-sort="due_asc">📅Vence↑</button>
+      <button class="sort-btn" data-sort="due_desc">📅Vence↓</button>
+      <button class="sort-btn" data-sort="created_desc">🕐Recente</button>
+      <button class="sort-btn" data-sort="created_asc">🕐Antiga</button>
+      <button class="sort-btn" data-sort="alpha">A-Z</button>
+    </div>
+
+    <!-- Group Bar -->
+    <div class="group-bar" id="groupBar">
+      <span class="group-label">AGRUPAR:</span>
+      <button class="group-btn active" data-group="none">Nenhum</button>
+      <button class="group-btn" data-group="priority">Prioridade</button>
+      <button class="group-btn" data-group="category">Categoria</button>
+      <button class="group-btn" data-group="project">Projeto</button>
+      <button class="group-btn" data-group="status">Status</button>
+      <button class="group-btn" data-group="due">Vencimento</button>
+    </div>
+
+    <!-- Header Row -->
+    <div class="header-row" id="headerRow">
+      <div class="header-col col-status"></div>
+      <div class="header-col col-status">★</div>
+      <div class="header-col col-status">OK</div>
+      <div class="header-col col-task">TAREFA</div>
+      <div class="header-col col-cat">CAT</div>
+      <div class="header-col col-priority">PRI</div>
+      <div class="header-col col-due">VENCE</div>
+      <div class="header-col col-date">DATA</div>
+      <div class="header-col col-action"></div>
+    </div>
+
+    <!-- Print Header (só aparece na impressão) -->
+    <div class="print-header" id="printHeader">
+      <h1>📋 FCEUX Task Manager — Lista de Tarefas</h1>
+      <div class="ph-date" id="printDate"></div>
+      <div class="ph-info" id="printInfo"></div>
+    </div>
+
+    <!-- Task List -->
+    <div class="task-list" id="taskList"></div>
+
+    <!-- Print Footer -->
+    <div class="print-footer" id="printFooter">
+      FCEUX Task Manager v2.6.6 — by Gustavo Nogueira — GM Joinville
+    </div>
+
+    <!-- Kanban Board -->
+    <div class="kanban-board" id="kanbanBoard">
+      <div class="kanban-column" data-status="todo">
+        <div class="kanban-col-header">📋 A FAZER <span class="kc-count" id="kcTodo">0</span></div>
+        <div class="kanban-col-body" id="kcBodyTodo"></div>
+      </div>
+      <div class="kanban-column" data-status="doing">
+        <div class="kanban-col-header">⚡ FAZENDO <span class="kc-count" id="kcDoing">0</span></div>
+        <div class="kanban-col-body" id="kcBodyDoing"></div>
+      </div>
+      <div class="kanban-column" data-status="done">
+        <div class="kanban-col-header">✅ FEITO <span class="kc-count" id="kcDone">0</span></div>
+        <div class="kanban-col-body" id="kcBodyDone"></div>
+      </div>
+    </div>
+
+    <!-- Calendar View -->
+    <div class="calendar-view" id="calendarView">
+      <div class="cal-header">
+        <button class="cal-nav-btn" id="calPrev">◀</button>
+        <span class="cal-title" id="calTitle">Abril 2026</span>
+        <div class="cal-view-toggle">
+          <button class="cal-view-btn active" data-calview="month" id="calMonthBtn">Mês</button>
+          <button class="cal-view-btn" data-calview="week" id="calWeekBtn">Semana</button>
+        </div>
+        <button class="cal-nav-btn" id="calNext">▶</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-week-grid" id="calWeekGrid" style="display:none"></div>
+    </div>
+
+    <!-- Mini Dashboard Bar -->
+    <div class="dash-bar-bottom" id="dashBarBottom">
+      <div class="db-item">
+        <span class="db-label">📊 Hoje:</span>
+        <span class="db-value green" id="dbTodayDone">0</span>
+        <span class="db-label">/</span>
+        <span class="db-value" id="dbTodayTotal">0</span>
+      </div>
+      <div class="db-progress">
+        <div class="db-progress-track"><div class="db-progress-fill" id="dbTodayFill" style="width:0%"></div></div>
+        <span class="db-value green" id="dbTodayPct">0%</span>
+      </div>
+      <div class="db-sep"></div>
+      <div class="db-item">
+        <span class="db-value fire" id="dbStreak">🔥 0</span>
+        <span class="db-label">dias</span>
+      </div>
+      <div class="db-sep"></div>
+      <div class="db-item">
+        <span class="db-value yellow" id="dbLevel">⭐ Nv.1</span>
+      </div>
+      <div class="db-sep"></div>
+      <div class="db-item">
+        <span class="db-label">⏱</span>
+        <span class="db-value" id="dbTimeToday">0min</span>
+      </div>
+      <div class="db-sep"></div>
+      <div class="db-item">
+        <span class="db-label">⚠️</span>
+        <span class="db-value red" id="dbOverdue">0</span>
+        <span class="db-label">atrasadas</span>
+      </div>
+      <div class="db-sep"></div>
+      <div class="db-quote">
+        <span class="quote-text" id="dbQuote">💬 "Foco é poder."</span>
+      </div>
+    </div>
+
+    <!-- Bottom Info -->
+      <div class="bottom-info">
+      <span class="sel-info" id="selInfo">&gt; Nenhuma tarefa selecionada</span>
+      <div class="mascot-container" id="mascotContainer">
+        <div class="mascot-reset-pos" id="mascotResetPos" title="Voltar à posição original">↩</div>
+        <canvas class="mascot-canvas idle" id="mascotCanvas" width="32" height="32"></canvas>
+        <div class="mascot-pet" id="mascotPet">
+          <canvas id="petCanvas" width="14" height="14"></canvas>
+        </div>
+        <div class="mascot-bubble" id="mascotBubble"></div>
+        <div class="mascot-name" id="mascotNameLabel">PIXEL</div>
+      </div>
+      <div class="weather-widget" id="weatherWidget">
+        <span class="weather-icon" id="weatherIcon">🌤</span>
+        <span class="weather-temp" id="weatherTemp">--°C</span>
+        <span class="weather-desc" id="weatherDesc">Carregando...</span>
+      </div>
+      <span id="clockDisplay">00:00:00</span>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>/USR/LOCAL/TASKS/GUSTAVO/</span>
+      <span>by Gustavo Nogueira — GM Joinville</span>
+      <span>v2.6.6</span>
+    </div>
+
+  </div><!-- END app-wrapper -->
+
+  <!-- ============================================ -->
+  <!-- MODAIS -->
+  <!-- ============================================ -->
+
+  <!-- HELP MODAL -->
+  <div class="modal-overlay" id="helpModal">
+    <div class="modal-window">
+      <div class="modal-titlebar">
+        <span>📖 Help — FCEUX Task Manager v2.6.6</span>
+        <button class="modal-close-btn" id="helpCloseX">✕</button>
+      </div>
+      <div class="modal-body">
+        <p><b>FCEUX Task Manager v2.6.6</b><br>95+ features · 33 módulos · 0 dependências<br>by Gustavo Nogueira — GM Joinville</p>
+
+        <h3>⌨️ Atalhos de Teclado</h3>
+        <table>
+          <tr><th>Tecla</th><th>Ação</th></tr>
+          <tr><td>↑ / ↓</td><td>Navegar entre tarefas</td></tr>
+          <tr><td>Espaço</td><td>Marcar / desmarcar tarefa</td></tr>
+          <tr><td>Delete</td><td>Excluir tarefa selecionada</td></tr>
+          <tr><td>Enter</td><td>Editar tarefa selecionada</td></tr>
+          <tr><td>Ctrl+Z</td><td>Desfazer exclusão</td></tr>
+          <tr><td>Ctrl+N</td><td>Tarefa rápida (popup)</td></tr>
+          <tr><td>Ctrl+K ou /</td><td>Paleta de comandos</td></tr>
+          <tr><td>Shift+Click</td><td>Seleção múltipla</td></tr>
+          <tr><td>F1</td><td>Abrir / fechar Help</td></tr>
+          <tr><td>Esc</td><td>Fechar modais</td></tr>
+        </table>
+
+        <h3>📋 Tarefas</h3>
+        <table>
+          <tr><th>Feature</th><th>Como usar</th></tr>
+          <tr><td>Criar</td><td>Digitar >> e clicar ADD ou Enter</td></tr>
+          <tr><td>Editar</td><td>Duplo-clique na tarefa</td></tr>
+          <tr><td>Excluir</td><td>[DEL] → lixeira (30 dias)</td></tr>
+          <tr><td>Duplicar</td><td>Editar → 📋 Duplicar</td></tr>
+          <tr><td>Favoritar</td><td>★ ao lado da tarefa (fixa no topo)</td></tr>
+          <tr><td>Tooltip</td><td>Hover 0.6s na tarefa → preview completo</td></tr>
+          <tr><td>Reordenar</td><td>Arrastar pelo ⠿</td></tr>
+        </table>
+
+        <h3>📝 Campos da Tarefa</h3>
+        <table>
+          <tr><th>Campo</th><th>Descrição</th></tr>
+          <tr><td>Prioridade</td><td>Alta, Média, Baixa</td></tr>
+          <tr><td>Categoria</td><td>Trabalho, Pessoal, Estudo, Manutenção, Reunião</td></tr>
+          <tr><td>Vencimento</td><td>Data + horário com contador (hoje, amanhã, Xd)</td></tr>
+          <tr><td>Recorrência</td><td>Diária, Úteis, Semanal, Quinzenal, Mensal</td></tr>
+          <tr><td>Subtarefas</td><td>Lista com progresso expandida</td></tr>
+          <tr><td>Tags</td><td>Etiquetas (#urgente, #cliente)</td></tr>
+          <tr><td>Notas</td><td>Comentários com data/hora</td></tr>
+          <tr><td>Anexos</td><td>Arquivos até 5MB com preview</td></tr>
+          <tr><td>Dependências</td><td>Bloqueia até concluídas</td></tr>
+          <tr><td>Tempo gasto</td><td>Cronômetro ▶ no edit modal</td></tr>
+        </table>
+
+        <h3>👁️ Visualizações</h3>
+        <table>
+          <tr><td>☰ Lista</td><td>Padrão com colunas e animação slide</td></tr>
+          <tr><td>▦ Kanban</td><td>A Fazer → Fazendo → Feito</td></tr>
+          <tr><td>📅 Calendário</td><td>Mês e Semana</td></tr>
+          <tr><td>🎯 Eisenhower</td><td>Urgente vs Importante</td></tr>
+        </table>
+
+        <h3>🔧 Ferramentas</h3>
+        <table>
+          <tr><td>📤 EXPORT / 📥 IMPORT</td><td>Backup JSON</td></tr>
+          <tr><td>📊 STATS</td><td>Dashboard + gráficos semanais</td></tr>
+          <tr><td>📜 HISTORY</td><td>Histórico de concluídas</td></tr>
+          <tr><td>🍅 POMO</td><td>Pomodoro + mini timer flutuante</td></tr>
+          <tr><td>📝 NOTES</td><td>Bloco de notas</td></tr>
+          <tr><td>📄 TEMPLATES</td><td>Modelos reutilizáveis</td></tr>
+          <tr><td>🎯 HABITS</td><td>Rastreio de hábitos</td></tr>
+          <tr><td>📦 ARQUIVO</td><td>Arquivo morto + Lixeira</td></tr>
+          <tr><td>⚙️ CONFIG</td><td>Configurações + Temas</td></tr>
+          <tr><td>🎯 MATRIX</td><td>Matriz de Eisenhower</td></tr>
+          <tr><td>🖨️ PRINT</td><td>Impressão formatada</td></tr>
+          <tr><td>🎯 FOCO</td><td>Modo foco minimalista</td></tr>
+          <tr><td>⏳ COUNTDOWN</td><td>Timer regressivo para deadlines</td></tr>
+        </table>
+
+        <h3>🎨 Temas</h3>
+        <table>
+          <tr><td>🌙 FCEUX Dark</td><td>Azul escuro (padrão)</td></tr>
+          <tr><td>🟢 Matrix Green</td><td>Verde terminal</td></tr>
+          <tr><td>🟣 Cyberpunk</td><td>Roxo neon</td></tr>
+          <tr><td>🔵 Ocean Blue</td><td>Azul oceano</td></tr>
+        </table>
+
+        <h3>⭐ Gamificação</h3>
+        <table>
+          <tr><td>XP</td><td>+10 (baixa), +20 (média), +30 (alta)</td></tr>
+          <tr><td>Streak</td><td>🔥 Bônus x1.2 (3d) / x1.5 (7d)</td></tr>
+          <tr><td>10 Níveis</td><td>Aprendiz → Lenda (10.000 XP)</td></tr>
+          <tr><td>Confetti</td><td>Celebração ao completar</td></tr>
+        </table>
+
+        <h3>🤖 Mascote PIXEL</h3>
+        <table>
+          <tr><td>1 clique</td><td>Fala uma frase</td></tr>
+          <tr><td>3 cliques</td><td>Personalizar (cor, acessório, nome)</td></tr>
+          <tr><td>10 cliques</td><td>Mini-game PIXEL SMASH!</td></tr>
+          <tr><td>Arrastar</td><td>Mover pela tela</td></tr>
+          <tr><td>11 estados</td><td>Reage a tarefas, pomodoro, clima, horário</td></tr>
+          <tr><td>Evolução</td><td>Muda visual por nível (1→3→5→7→10)</td></tr>
+        </table>
+
+        <h3>🏆 Conquistas</h3>
+        <table>
+          <tr><td>30+ badges</td><td>Colecionáveis por marcos atingidos</td></tr>
+          <tr><td>Popup</td><td>Animação + som ao desbloquear</td></tr>
+          <tr><td>Botão BADGES</td><td>Ver progresso e todas as conquistas</td></tr>
+        </table>
+
+        <h3>🔊 Sons</h3>
+        <table>
+          <tr><td>✅ Completar</td><td>Som 8-bit de vitória</td></tr>
+          <tr><td>🗑 Deletar</td><td>Som de descida</td></tr>
+          <tr><td>⭐ Level Up</td><td>Fanfarra retro</td></tr>
+          <tr><td>🏆 Badge</td><td>Som especial de conquista</td></tr>
+          <tr><td>⚙️ Config</td><td>Desativar em CONFIG → Sons</td></tr>
+        </table>
+
+        <h3>💾 Backup</h3>
+        <table>
+          <tr><td>Automático</td><td>A cada 30 min no localStorage</td></tr>
+          <tr><td>Restaurar</td><td>Paleta de comandos → "Restaurar backup"</td></tr>
+          <tr><td>Manual</td><td>📤 EXPORT para arquivo JSON</td></tr>
+        </table>
+
+        <h3>📊 Mini Dashboard</h3>
+        <p>Barra inferior: progresso do dia, streak, nível, tempo focado, atrasadas, frase motivacional.</p>
+
+        <h3>💾 Dados</h3>
+        <table>
+          <tr><td>Banco</td><td>IndexedDB (local)</td></tr>
+          <tr><td>PWA</td><td>Instalar como app</td></tr>
+          <tr><td>Offline</td><td>100% funcional</td></tr>
+          <tr><td>Privacidade</td><td>100% local — nada sai do PC</td></tr>
+        </table>
+
+        <button class="modal-ok" id="helpOk">OK</button>
+      </div>
+    </div>
+  </div>       
+
+  <!-- EDIT MODAL -->
+  <div class="edit-overlay" id="editOverlay">
+    <div class="edit-window">
+      <div class="modal-titlebar">
+        <span>✏️ Editar Tarefa</span>
+        <button class="modal-close-btn" id="editCloseBtn">✕</button>
+      </div>
+      <div class="edit-body">
+        <label>Tarefa:</label>
+        <input type="text" id="editText" maxlength="100" />
+
+        <label>Descrição:</label>
+        <textarea id="editDesc"></textarea>
+
+        <label>Prioridade:</label>
+        <select id="editPri">
+          <option value="alta">Alta</option>
+          <option value="media">Média</option>
+          <option value="baixa">Baixa</option>
+        </select>
+
+        <label>Categoria:</label>
+        <select id="editCat">
+          <option value="">—</option>
+          <option value="trabalho">Trabalho</option>
+          <option value="pessoal">Pessoal</option>
+          <option value="estudo">Estudo</option>
+          <option value="manutenção">Manutenção</option>
+          <option value="reunião">Reunião</option>
+        </select>
+
+        <label>Vencimento:</label>
+        <input type="date" id="editDue" />
+
+        <label>Horário limite:</label>
+        <input type="time" id="editDueTime" />
+
+        <label>Recorrência:</label>
+        <select id="editRecurrence">
+          <option value="">Nenhuma</option>
+          <option value="daily">Diária</option>
+          <option value="weekdays">Dias úteis</option>
+          <option value="weekly">Semanal</option>
+          <option value="biweekly">Quinzenal</option>
+          <option value="monthly">Mensal</option>
+        </select>
+
+        <label>Projeto:</label>
+        <select id="editProject">
+          <option value="Geral">Geral</option>
+        </select>
+
+        <label>Status:</label>
+        <select id="editStatus">
+          <option value="todo">A Fazer</option>
+          <option value="doing">Fazendo</option>
+        </select>
+
+        <label>Estimativa:</label>
+        <div class="estimate-row">
+          <input type="number" id="editEstimate" class="estimate-input" min="0" max="480" placeholder="0" />
+          <span class="estimate-unit">minutos</span>
+        </div>
+
+        <label>Lembretes:</label>
+        <div class="reminder-list" id="editReminders"></div>
+        <div class="reminder-row">
+          <input type="datetime-local" id="reminderInput" />
+          <button class="subtask-add-btn" id="reminderAddBtn">+</button>
+        </div>
+
+        <label>Tempo gasto:</label>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="text" id="editTimeSpent" readonly style="flex:1;background:#f0f0f0;color:#666" />
+          <button id="editTimerBtn" style="background:#c0c0c0;border:2px outset #fff;padding:3px 10px;font-family:monospace;font-size:11px;cursor:pointer">▶ Iniciar</button>
+        </div>
+
+        <label>Subtarefas:</label>
+        <div class="subtask-list" id="editSubtasks"></div>
+        <div class="subtask-add-row">
+          <input type="text" id="subtaskInput" placeholder="Nova subtarefa..." />
+          <button class="subtask-add-btn" id="subtaskAddBtn">+</button>
+        </div>
+
+        <label>Tags:</label>
+        <div class="edit-tags-wrap" id="editTagsWrap"></div>
+        <div class="tag-input-row">
+          <input type="text" id="tagInput" placeholder="Nova tag..." />
+          <button class="subtask-add-btn" id="tagAddBtn">+</button>
+        </div>
+
+        <label>Comentários:</label>
+        <div class="comment-list" id="editComments"></div>
+        <div class="comment-add-row">
+          <textarea id="commentInput" placeholder="Novo comentário..."></textarea>
+          <button class="subtask-add-btn" id="commentAddBtn">+</button>
+        </div>
+
+        <label>Anexos:</label>
+        <div class="attachment-list" id="editAttachments"></div>
+        <div class="attachment-input-row">
+          <button class="att-file-btn" id="attFileBtn">📎 Anexar arquivo</button>
+          <input type="file" id="attFileInput" multiple style="display:none" />
+        </div>
+
+        <label>Depende de:</label>
+        <div class="dep-list" id="editDeps"></div>
+        <div class="dep-select-row">
+          <select id="depSelect"><option value="">Selecionar tarefa...</option></select>
+          <button class="subtask-add-btn" id="depAddBtn">+</button>
+        </div>
+      </div>
+      <div class="edit-footer">
+        <button id="editDuplicateBtn" style="background:#c0c0c0;border:2px outset #fff;padding:4px 14px;font-family:'Segoe UI',sans-serif;font-size:12px;cursor:pointer">📋 Duplicar</button>
+        <button id="editSaveBtn">💾 Salvar</button>
+        <button id="editCancelBtn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATISTICS -->
+  <div class="stats-overlay" id="statsOverlay">
+    <div class="stats-window">
+      <div class="stats-header">
+        <span>📊 Estatísticas</span>
+        <button class="stats-close-btn" id="statsCloseBtn">✕</button>
+      </div>
+      <div class="stats-body" id="statsBody"></div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="history-overlay" id="historyOverlay">
+    <div class="history-window">
+      <div class="history-header">
+        <span>📜 Histórico</span>
+        <button class="stats-close-btn" id="historyCloseBtn">✕</button>
+      </div>
+      <div class="history-body" id="historyBody"></div>
+      <div class="history-footer">
+        <span id="historyCount">0 itens</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- POMODORO -->
+  <div class="pomo-overlay" id="pomoOverlay">
+    <div class="pomo-window">
+      <div class="pomo-title">🍅 POMODORO</div>
+      <div class="pomo-task-name" id="pomoTaskName">Nenhuma tarefa selecionada</div>
+      <div class="pomo-timer" id="pomoTimer">25:00</div>
+      <div class="pomo-phase" id="pomoPhase">FOCO</div>
+      <div class="pomo-dots" id="pomoDots">
+        <div class="pomo-dot"></div>
+        <div class="pomo-dot"></div>
+        <div class="pomo-dot"></div>
+        <div class="pomo-dot"></div>
+      </div>
+      <div class="pomo-buttons">
+        <button class="pomo-btn start" id="pomoStart">▶ INICIAR</button>
+        <button class="pomo-btn" id="pomoPause">⏸ PAUSAR</button>
+        <button class="pomo-btn stop" id="pomoReset">⏹ RESET</button>
+      </div>
+      <div class="pomo-settings">
+        Foco: <input type="number" id="pomoWork" value="25" min="1" max="120" /> min
+        Pausa: <input type="number" id="pomoBreak" value="5" min="1" max="30" /> min
+      </div>
+      <div class="pomo-info-bar">
+        <div class="pomo-info-item"><div class="pi-val" id="pomoTodayCount">0</div><div class="pi-lbl">HOJE</div></div>
+        <div class="pomo-info-item"><div class="pi-val" id="pomoWeekCount">0</div><div class="pi-lbl">SEMANA</div></div>
+        <div class="pomo-info-item"><div class="pi-val" id="pomoTotalCount">0</div><div class="pi-lbl">TOTAL</div></div>
+      </div>
+      <div class="pomo-close" id="pomoClose">✕ Fechar</div>
+    </div>
+  </div>
+
+  <!-- NOTEPAD -->
+  <div class="notepad-overlay" id="notepadOverlay">
+    <div class="notepad-window">
+      <div class="modal-titlebar">
+        <span>📝 Bloco de Notas</span>
+        <button class="modal-close-btn" id="notepadCloseBtn">✕</button>
+      </div>
+      <div class="notepad-body">
+        <textarea class="notepad-textarea" id="notepadTextarea" placeholder="Suas anotações..."></textarea>
+      </div>
+      <div class="notepad-footer">
+        <span id="notepadCharCount">0 caracteres</span>
+        <button id="notepadClearBtn">Limpar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMAND PALETTE -->
+  <div class="cmd-overlay" id="cmdOverlay">
+    <div class="cmd-box">
+      <div class="cmd-input-wrap">
+        <span class="cmd-prefix">/</span>
+        <input type="text" class="cmd-input" id="cmdInput" placeholder="Buscar comando..." autocomplete="off" />
+      </div>
+      <div class="cmd-results" id="cmdResults"></div>
+      <div class="cmd-hint">↑↓ Navegar • Enter Executar • Esc Fechar</div>
+    </div>
+  </div>
+
+  <!-- QUICK ADD -->
+  <div class="quickadd-overlay" id="quickaddOverlay">
+    <div class="quickadd-box">
+      <div class="quickadd-title">⚡ Tarefa Rápida (Ctrl+N)</div>
+      <input type="text" class="quickadd-input" id="qaInput" placeholder="O que precisa fazer?" autocomplete="off" />
+      <div class="quickadd-row">
+        <span class="qa-lbl">PRI:</span>
+        <select id="qaPri">
+          <option value="media">Média</option>
+          <option value="alta">Alta</option>
+          <option value="baixa">Baixa</option>
+        </select>
+        <span class="qa-lbl">CAT:</span>
+        <select id="qaCat">
+          <option value="">—</option>
+          <option value="trabalho">Trabalho</option>
+          <option value="pessoal">Pessoal</option>
+          <option value="estudo">Estudo</option>
+          <option value="manutenção">Manutenção</option>
+          <option value="reunião">Reunião</option>
+        </select>
+      </div>
+      <div class="quickadd-row">
+        <span class="qa-lbl">VENCE:</span>
+        <input type="date" id="qaDue" />
+        <span class="qa-lbl">ATÉ:</span>
+        <input type="time" id="qaDueTime" />
+      </div>
+      <div class="quickadd-actions">
+        <span class="quickadd-hint">Enter = adicionar • Esc = fechar</span>
+        <button class="quickadd-submit" id="qaSubmit">+ ADICIONAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEMPLATES -->
+  <div class="template-overlay" id="templateOverlay">
+    <div class="template-window">
+      <div class="template-header">
+        <span>📄 Templates</span>
+        <button class="stats-close-btn" id="templateCloseBtn">✕</button>
+      </div>
+      <div class="template-body" id="templateBody"></div>
+      <div class="template-footer">
+        <button id="templateNewBtn">➕ Criar template vazio</button>
+        <button id="templateSaveCurrentBtn">📋 Salvar tarefa atual como template</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVE TEMPLATE -->
+  <div class="save-template-overlay" id="saveTemplateOverlay">
+    <div class="save-template-box">
+      <div class="modal-titlebar">
+        <span>📄 Salvar Template</span>
+      </div>
+      <div class="save-template-body">
+        <label>Nome do template:</label>
+        <input type="text" id="templateNameInput" placeholder="Ex: Checklist 1º Turno" />
+        <label>Descrição:</label>
+        <input type="text" id="templateDescInput" placeholder="Descrição opcional..." />
+        <div class="save-template-buttons">
+          <button id="templateSaveConfirm">💾 Salvar</button>
+          <button id="templateSaveCancel">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT INPUT -->
+  <div class="project-input-overlay" id="projectInputOverlay">
+    <div class="project-input-box">
+      <div class="modal-titlebar">
+        <span>📂 Novo Projeto</span>
+      </div>
+      <div class="project-input-body">
+        <input type="text" id="projectNameInput" placeholder="Nome do projeto..." />
+        <div class="pi-buttons">
+          <button id="projectConfirmBtn">Criar</button>
+          <button id="projectCancelBtn">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKDAYS / VACATION MODAL -->
+  <div class="vacation-overlay" id="vacationOverlay">
+    <div class="vacation-box">
+      <div class="modal-titlebar">
+        <span>📆 Dias de Trabalho</span>
+        <button class="modal-close-btn" id="vacationClose">✕</button>
+      </div>
+      <div class="vacation-body">
+        <p>Selecione os dias que você trabalha.</p>
+        <div class="workdays-row" id="workdaysRow"></div>
+        <label>Folga de:</label>
+        <input type="date" id="vacationStart" />
+        <label>Até:</label>
+        <input type="date" id="vacationEnd" />
+        <div class="vacation-buttons">
+          <button id="vacationSaveBtn">💾 Salvar</button>
+          <button id="vacationCancelBtn">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHIVE & TRASH -->
+  <div class="archive-overlay" id="archiveOverlay">
+    <div class="archive-window">
+      <div class="archive-header">
+        <span>📦 Arquivo & Lixeira</span>
+        <button class="stats-close-btn" id="archiveCloseBtn">✕</button>
+      </div>
+      <div class="archive-tabs">
+        <div class="archive-tab active" data-atab="archive">📦 Arquivo Morto</div>
+        <div class="archive-tab" data-atab="trash">🗑 Lixeira</div>
+      </div>
+      <div class="archive-body" id="archiveBody"></div>
+      <div class="archive-footer">
+        <span id="archiveCount">0 itens</span>
+        <button id="archiveEmptyBtn">🗑 Esvaziar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEU DIA SELECTOR -->
+  <div class="myday-selector-overlay" id="mydaySelectorOverlay">
+    <div class="myday-selector-box">
+      <div class="myday-selector-header">
+        <span>⭐ Escolher Foco do Dia</span>
+        <button class="stats-close-btn" id="mydaySelectorClose">✕</button>
+      </div>
+      <div class="myday-selector-body" id="mydaySelectorBody"></div>
+    </div>
+  </div>
+
+  <!-- HABIT TRACKER -->
+  <div class="habit-overlay" id="habitOverlay">
+    <div class="habit-window">
+      <div class="habit-header">
+        <span>🎯 Habit Tracker</span>
+        <button class="stats-close-btn" id="habitCloseBtn">✕</button>
+      </div>
+      <div class="habit-body" id="habitBody"></div>
+      <div class="habit-footer">
+        <div class="habit-add-row">
+          <input type="text" class="habit-add-input" id="habitInput" placeholder="Novo hábito..." maxlength="30" />
+          <button class="habit-add-btn" id="habitAddBtn">+ ADD</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIGURAÇÕES -->
+  <div class="config-overlay" id="configOverlay">
+    <div class="config-window">
+      <div class="config-header">
+        <span>⚙️ Configurações</span>
+        <button class="stats-close-btn" id="configCloseBtn">✕</button>
+      </div>
+      <div class="config-body">
+        <div class="config-section">
+          <div class="config-section-title">🎨 TEMA</div>
+          <div class="config-row">
+            <div class="theme-options" id="cfgThemes">
+              <button class="theme-btn t-dark active" data-theme="dark">🌙 Dark</button>
+              <button class="theme-btn t-matrix" data-theme="matrix">🟢 Matrix</button>
+              <button class="theme-btn t-cyberpunk" data-theme="cyberpunk">🟣 Cyber</button>
+              <button class="theme-btn t-ocean" data-theme="ocean">🔵 Ocean</button>
+            </div>
+          </div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">🍅 POMODORO</div>
+          <div class="config-row"><label>Tempo de foco (min):</label><input type="number" id="cfgPomoFocus" min="1" max="120" value="25" /></div>
+          <div class="config-row"><label>Tempo de pausa (min):</label><input type="number" id="cfgPomoPause" min="1" max="30" value="5" /></div>
+          <div class="config-row"><label>Pausa longa (min):</label><input type="number" id="cfgPomoLongBreak" min="5" max="60" value="15" /></div>
+          <div class="config-row"><label>Pausa longa a cada:</label><input type="number" id="cfgPomoLongInterval" min="2" max="8" value="4" /> pomos</div>
+          <div class="config-row"><label>Som de alarme:</label><div class="config-toggle active" id="cfgPomoSound"></div></div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">📆 DIAS DE TRABALHO</div>
+          <div class="config-row" style="flex-wrap:wrap;gap:4px;justify-content:flex-start" id="cfgWorkdays"></div>
+          <div class="config-row"><label>Férias de:</label><input type="date" id="cfgVacStart" /></div>
+          <div class="config-row"><label>Férias até:</label><input type="date" id="cfgVacEnd" /></div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">🌤 CLIMA</div>
+          <div class="config-row"><label>Cidade:</label><input type="text" id="cfgWeatherCity" value="Joinville" /></div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">🎯 MODO FOCO</div>
+          <div class="config-row"><label>Escurecer fundo:</label><div class="config-toggle active" id="cfgFocusDark"></div></div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">🔺 AUTO-ESCALA</div>
+          <div class="config-row"><label>Escalar prioridade automático:</label><div class="config-toggle active" id="cfgAutoScale"></div></div>
+          <div class="config-row"><label>Média → Alta (dias antes):</label><input type="number" id="cfgScaleMedia" min="1" max="7" value="2" /></div>
+          <div class="config-row"><label>Baixa → Média (dias antes):</label><input type="number" id="cfgScaleBaixa" min="1" max="7" value="3" /></div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">🔔 NOTIFICAÇÕES</div>
+          <div class="config-row"><label>Toasts in-app:</label><div class="config-toggle active" id="cfgToasts"></div></div>
+          <div class="config-row"><label>Notificações browser:</label><div class="config-toggle active" id="cfgBrowserNotif"></div></div>
+          <div class="config-row"><label>Review diário (17:30):</label><div class="config-toggle active" id="cfgReview"></div></div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">🔊 SONS</div>
+          <div class="config-row"><label>Sons de interface:</label><div class="config-toggle active" id="cfgSounds"></div></div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">🎨 VISUAL</div>
+          <div class="config-row"><label>Partículas de fundo:</label><div class="config-toggle active" id="cfgParticles"></div></div>
+          <div class="config-row"><label>Tooltip detalhado (hover):</label><div class="config-toggle active" id="cfgTooltips"></div></div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">🎮 GAMIFICAÇÃO</div>
+          <div class="config-row"><label>Confetti ao completar:</label><div class="config-toggle active" id="cfgConfetti"></div></div>
+          <div class="config-row"><label>Popup de XP:</label><div class="config-toggle active" id="cfgXpPopup"></div></div>
+        </div>
+        <div class="config-section">
+          <div class="config-section-title">💾 DADOS</div>
+          <div class="config-row"><label>Banco:</label><span style="color:var(--text-green)">IndexedDB (local)</span></div>
+          <div class="config-row">
+            <button class="toolbar-btn" onclick="TaskManager.exportJSON()">📤 Exportar</button>
+            <button class="toolbar-btn" onclick="document.getElementById('importInput').click()">📥 Importar</button>
+          </div>
+          <div class="config-row">
+            <button class="toolbar-btn" style="color:#ff4444;border-color:rgba(255,60,60,0.3)" id="cfgClearAll">🗑 Limpar TUDO</button>
+          </div>
+        </div>
+      </div>
+      <div class="config-footer">
+        <button class="config-save-btn" id="cfgSaveBtn">💾 Salvar configurações</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATRIZ DE EISENHOWER -->
+  <div class="eisenhower-overlay" id="eisenhowerOverlay">
+    <div class="eisenhower-window">
+      <div class="eisenhower-header">
+        <span>🎯 Matriz de Eisenhower</span>
+        <button class="stats-close-btn" id="eisenhowerCloseBtn">✕</button>
+      </div>
+      <div class="eis-labels">
+        <span>← URGENTE</span>
+        <span>NÃO URGENTE →</span>
+      </div>
+      <div class="eisenhower-grid" id="eisenhowerGrid">
+        <div class="eis-quadrant q1" id="eisQ1">
+          <div class="eis-quadrant-title">🔴 FAZER AGORA<br><small>Urgente + Importante</small></div>
+        </div>
+        <div class="eis-quadrant q2" id="eisQ2">
+          <div class="eis-quadrant-title">🔵 AGENDAR<br><small>Importante, não urgente</small></div>
+        </div>
+        <div class="eis-quadrant q3" id="eisQ3">
+          <div class="eis-quadrant-title">🟡 DELEGAR<br><small>Urgente, não importante</small></div>
+        </div>
+        <div class="eis-quadrant q4" id="eisQ4">
+          <div class="eis-quadrant-title">🟢 ELIMINAR<br><small>Nem urgente, nem importante</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODO FOCO -->
+  <div class="focus-overlay" id="focusOverlay">
+    <div class="focus-close" id="focusClose">ESC para sair</div>
+    <div class="focus-task-label" id="focusLabel">TAREFA ATUAL</div>
+    <div class="focus-task-text" id="focusTaskText">Selecione uma tarefa</div>
+    <div class="focus-subtasks" id="focusSubtasks"></div>
+    <div class="focus-timer" id="focusTimer">25:00</div>
+    <div class="focus-phase" id="focusPhase">FOCO</div>
+    <div class="focus-progress" id="focusDots">
+      <div class="focus-dot"></div>
+      <div class="focus-dot"></div>
+      <div class="focus-dot"></div>
+      <div class="focus-dot"></div>
+    </div>
+    <div class="focus-buttons">
+      <button class="focus-btn start" id="focusStartBtn">▶ INICIAR</button>
+      <button class="focus-btn" id="focusPauseBtn">⏸ PAUSAR</button>
+      <button class="focus-btn stop" id="focusResetBtn">⏹ RESET</button>
+    </div>
+    <div class="focus-stats">
+      <div class="focus-stat"><div class="fs-val" id="focusDoneToday">0</div><div class="fs-lbl">HOJE</div></div>
+      <div class="focus-stat"><div class="fs-val" id="focusStreak">🔥 0</div><div class="fs-lbl">STREAK</div></div>
+      <div class="focus-stat"><div class="fs-val" id="focusXP">0</div><div class="fs-lbl">XP</div></div>
+    </div>
+    <div class="focus-quote" id="focusQuote">💬 "Foco é poder."</div>
+  </div>
+
+  <!-- MASCOT CONFIG -->
+  <div class="mascot-config-overlay" id="mascotConfigOverlay">
+    <div class="mascot-config-window">
+      <div class="mascot-config-header">
+        <span>🤖 Personalizar PIXEL</span>
+        <button class="stats-close-btn" id="mascotConfigClose">✕</button>
+      </div>
+      <div class="mascot-config-body">
+        <div class="mc-preview">
+          <canvas id="mascotPreviewCanvas" width="32" height="32"></canvas>
+        </div>
+
+        <div class="mc-section">
+          <div class="mc-section-title">📛 NOME</div>
+          <div class="mc-row">
+            <label>Nome do robô:</label>
+            <input type="text" id="mcNameInput" maxlength="10" value="PIXEL" />
+          </div>
+        </div>
+
+        <div class="mc-section">
+          <div class="mc-section-title">🎨 COR DO CORPO</div>
+          <div class="mc-colors" id="mcColors"></div>
+        </div>
+
+        <div class="mc-section">
+          <div class="mc-section-title">🎩 ACESSÓRIO</div>
+          <div class="mc-accessories" id="mcAccessories"></div>
+        </div>
+
+        <div class="mc-section">
+          <div class="mc-section-title">📈 EVOLUÇÃO (por nível)</div>
+          <div class="mc-evolution" id="mcEvolution"></div>
+        </div>
+
+        <button class="mc-save-btn" id="mcSaveBtn">💾 Salvar personalização</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASCOT MINI GAME -->
+  <div class="mascot-game-overlay" id="mascotGameOverlay">
+    <div class="mascot-game-box">
+      <div class="mg-title" id="mgTitle">🤖 PIXEL SMASH!</div>
+      <div class="mg-score" id="mgScore">0</div>
+      <div class="mg-instruction" id="mgInstruction">Clique no alvo o máximo que puder!</div>
+      <div class="mg-timer" id="mgTimer">10s</div>
+      <div class="mg-target" id="mgTarget">🤖</div>
+      <div class="mg-result" id="mgResult"></div>
+      <div class="mg-close" id="mgClose">✕ Fechar</div>
+    </div>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div class="countdown-overlay" id="countdownOverlay">
+    <div class="countdown-window">
+      <div class="countdown-header">
+        <span>⏳ Countdown</span>
+        <button class="stats-close-btn" id="countdownCloseBtn">✕</button>
+      </div>
+      <div class="countdown-body" id="countdownBody"></div>
+      <div class="cd-add-row">
+        <input type="text" id="cdNameInput" placeholder="Nome do evento..." />
+        <input type="date" id="cdDateInput" />
+        <button class="cd-add-btn" id="cdAddBtn">+ ADD</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BADGES / CONQUISTAS -->
+  <div class="badges-overlay" id="badgesOverlay">
+    <div class="badges-window">
+      <div class="badges-header">
+        <span>🏆 Conquistas</span>
+        <button class="stats-close-btn" id="badgesCloseBtn">✕</button>
+      </div>
+      <div class="badges-body" id="badgesBody"></div>
+    </div>
+  </div>
+
+  <!-- BADGE UNLOCK POPUP -->
+  <div class="badge-unlock-popup" id="badgeUnlockPopup">
+    <div class="bup-icon" id="bupIcon">🏆</div>
+    <div class="bup-title">CONQUISTA DESBLOQUEADA!</div>
+    <div class="bup-name" id="bupName">Nome</div>
+    <div class="bup-desc" id="bupDesc">Descrição</div>
+    <button class="bup-dismiss" id="bupDismiss">Incrível! ⭐</button>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div class="onboarding-overlay" id="onboardingOverlay">
+    <div class="onboarding-box">
+      <div class="ob-step-icon" id="obIcon">🤖</div>
+      <div class="ob-step-title" id="obTitle">Bem-vindo!</div>
+      <div class="ob-step-text" id="obText">Texto</div>
+      <div class="ob-dots" id="obDots"></div>
+      <div class="ob-buttons">
+        <button class="ob-btn skip" id="obSkip">Pular</button>
+        <button class="ob-btn primary" id="obNext">Próximo →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="about-overlay" id="aboutOverlay">
+    <div class="about-window">
+      <div class="about-header">
+        <div class="about-logo">🤖</div>
+        <div class="about-title">FCEUX Task Manager</div>
+        <div class="about-version">v2.6.6 — Build 2026.04</div>
+      </div>
+      <div class="about-body">
+        <div class="about-info">
+          Gerenciador de tarefas com 110+ features,<br>
+          zero dependências e 100% offline.<br>
+          Feito em Joinville, SC.
+        </div>
+        <div class="about-stats-grid">
+          <div class="about-stat"><div class="as-val">110+</div><div class="as-lbl">FEATURES</div></div>
+          <div class="about-stat"><div class="as-val">36</div><div class="as-lbl">MÓDULOS</div></div>
+          <div class="about-stat"><div class="as-val">0</div><div class="as-lbl">DEPENDÊNCIAS</div></div>
+        </div>
+        <div class="about-tech">
+          <span class="about-tech-tag">HTML5</span>
+          <span class="about-tech-tag">CSS3</span>
+          <span class="about-tech-tag">JavaScript</span>
+          <span class="about-tech-tag">IndexedDB</span>
+          <span class="about-tech-tag">Canvas</span>
+          <span class="about-tech-tag">PWA</span>
+          <span class="about-tech-tag">Service Worker</span>
+        </div>
+        <div class="about-author">
+          Desenvolvido por <b style="color:var(--text-cyan)">Gustavo Nogueira</b><br>
+          General Motors — Joinville GPS Engine Plant<br>
+          JVL [CSS PRIME] - Utilities Maintenance
+        </div>
+        <button class="about-close" id="aboutCloseBtn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACKUP BADGE -->
+  <div class="backup-badge" id="backupBadge">💾 Backup salvo</div>
+
+  <!-- MATRIX SCREENSAVER -->
+  <div class="matrix-screen" id="matrixScreen">
+    <canvas id="matrixCanvas"></canvas>
+    <div class="matrix-hint">Clique ou pressione qualquer tecla para voltar</div>
+  </div>
+
+  <!-- POMODORO MINI TIMER -->
+  <div class="pomo-mini" id="pomoMini">
+    <span class="pomo-mini-icon" id="pomoMiniIcon">🍅</span>
+    <div>
+      <div class="pomo-mini-time" id="pomoMiniTime">25:00</div>
+      <div class="pomo-mini-phase" id="pomoMiniPhase">FOCO</div>
+      <div class="pomo-mini-task" id="pomoMiniTask"></div>
+    </div>
+    <span class="pomo-mini-close" id="pomoMiniClose" title="Abrir Pomodoro">⤢</span>
+    <div class="pomo-mini-progress">
+      <div class="pomo-mini-progress-fill" id="pomoMiniFill" style="width:100%"></div>
+    </div>
+  </div>
+
+  <!-- REMINDER POPUP -->
+  <div class="reminder-popup" id="reminderPopup">
+    <div class="rp-icon">⏰</div>
+    <div class="rp-title">LEMBRETE!</div>
+    <div class="rp-task" id="rpTask">Tarefa</div>
+    <div class="rp-time" id="rpTime">Agora</div>
+    <button class="rp-dismiss" id="rpDismiss">OK, entendi!</button>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- UNDO BAR -->
+  <div class="undo-bar" id="undoBar">
+    <span id="undoMsg">Tarefa excluída</span>
+    <button class="undo-btn" id="undoBtn">↩ DESFAZER</button>
+    <div class="undo-timer"><div class="undo-timer-fill" id="undoTimerFill"></div></div>
+  </div>
+
+  <!-- MULTI SELECT ACTIONS -->
+  <div class="multi-actions-bar" id="multiActionsBar">
+    <span class="multi-count" id="multiCount">0</span> selecionadas
+    <button class="multi-btn" id="multiComplete">✅ Completar</button>
+    <button class="multi-btn danger" id="multiDelete">🗑 Excluir</button>
+    <span class="multi-close" id="multiClose">✕</span>
+  </div>
+
+  <!-- SAVE INDICATOR -->
+  <div class="save-indicator" id="saveIndicator">💾 Salvo</div>
+
+  <!-- MINIMIZED TASKBAR -->
+  <div class="minimized-bar" id="minimizedBar">
+    <button class="taskbar-btn" id="taskbarRestore">
+      <div class="taskbar-ico"></div>
+      FCEUX Task Manager
+    </button>
+    <div class="taskbar-clock" id="taskbarClock">00:00</div>
+  </div>
+
+  <!-- SHUTDOWN -->
+  <div class="shutdown-screen" id="shutdownScreen">
+    Desligando...
+    <div class="shutdown-msg" id="shutdownMsg">Clique para voltar</div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SCRIPTS -->
+  <!-- ============================================ -->
+  <script src="js/db.js"></script>
+  <script src="js/tasks.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/keyboard.js"></script>
+  <script src="js/boot.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/views.js"></script>
+  <script src="js/pomodoro.js"></script>
+  <script src="js/notepad.js"></script>
+  <script src="js/commands.js"></script>
+  <script src="js/multiselect.js"></script>
+  <script src="js/weather.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/quickadd.js"></script>
+  <script src="js/workdays.js"></script>
+  <script src="js/archive.js"></script>
+  <script src="js/myday.js"></script>
+  <script src="js/gamification.js"></script>
+  <script src="js/habits.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/eisenhower.js"></script>
+  <script src="js/matrix.js"></script>
+  <script src="js/dashbar.js"></script>
+  <script src="js/focusmode.js"></script>
+  <script src="js/printview.js"></script>
+  <script src="js/mascot.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/countdown.js"></script>
+  <script src="js/tooltip.js"></script>
+  <script src="js/favicon.js"></script>
+  <script src="js/challenges.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/pet.js"></script>
+  <script src="js/natural.js"></script>
+  <script src="js/reminders.js"></script>
+  <script src="js/autoscale.js"></script>
+  <script src="js/sounds.js"></script>
+  <script src="js/badges.js"></script>
+  <script src="js/onboarding.js"></script>
+  <script src="js/backup.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
