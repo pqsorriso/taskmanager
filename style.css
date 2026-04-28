@@ -2937,3 +2937,277 @@ body.theme-ocean {
   color: #006688;
   font-size: 10px;
 }
+
+/* ================================================================
+85. HABITS — MELHORIAS COMPLETAS
+================================================================ */
+.habit-item {
+  background: rgba(0,0,40,0.8);
+  border: 1px solid rgba(0,100,200,0.3);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  transition: all 0.15s;
+}
+
+.habit-item:hover { border-color: rgba(0,170,255,0.4); }
+
+.habit-item.dragging { opacity: 0.5; border-color: var(--text-cyan); }
+
+.habit-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.habit-icon {
+  font-size: 18px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.habit-name {
+  color: var(--text-cyan);
+  font-size: 13px;
+  font-weight: bold;
+  flex: 1;
+}
+
+.habit-name.editable {
+  cursor: pointer;
+  border-bottom: 1px dashed rgba(0,170,255,0.3);
+}
+
+.habit-name.editable:hover { color: #fff; }
+
+.habit-category {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+
+.habit-category.cat-saude { background: rgba(0,200,100,0.2); color: var(--pri-baixa); border: 1px solid rgba(0,200,100,0.3); }
+.habit-category.cat-produtividade { background: rgba(0,170,255,0.2); color: var(--text-cyan); border: 1px solid rgba(0,170,255,0.3); }
+.habit-category.cat-pessoal { background: rgba(200,100,255,0.2); color: #cc88ff; border: 1px solid rgba(200,100,255,0.3); }
+.habit-category.cat-fitness { background: rgba(255,170,0,0.2); color: var(--text-yellow); border: 1px solid rgba(255,170,0,0.3); }
+.habit-category.cat-estudo { background: rgba(255,100,100,0.2); color: var(--pri-alta); border: 1px solid rgba(255,100,100,0.3); }
+
+.habit-streak {
+  color: #ff8800;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.habit-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 10px;
+  color: #006688;
+}
+
+.habit-meta .hm-goal { color: var(--text-yellow); }
+.habit-meta .hm-reminder { color: #cc88ff; }
+.habit-meta .hm-xp { color: var(--pri-baixa); }
+
+.habit-week {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.habit-day {
+  flex: 1;
+  text-align: center;
+  padding: 3px 2px;
+  border-radius: 3px;
+  cursor: pointer;
+  background: rgba(0,0,20,0.6);
+  border: 1px solid rgba(0,60,120,0.3);
+  transition: all 0.15s;
+}
+
+.habit-day:hover { border-color: rgba(0,170,255,0.5); }
+.habit-day.today { border-color: var(--text-cyan); }
+.habit-day.done { background: rgba(0,150,80,0.3); border-color: rgba(0,200,100,0.4); }
+
+.habit-day .hd-name {
+  display: block;
+  font-size: 8px;
+  color: #006688;
+}
+
+.habit-day .hd-check {
+  display: block;
+  font-size: 13px;
+  color: #004040;
+}
+
+.habit-day.done .hd-check { color: var(--pri-baixa); }
+.habit-day.today .hd-name { color: var(--text-cyan); }
+
+.habit-day .hd-count {
+  display: block;
+  font-size: 8px;
+  color: var(--text-yellow);
+}
+
+.habit-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #006688;
+  margin-bottom: 6px;
+}
+
+.habit-bar-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(0,0,40,0.8);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.habit-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pri-baixa), #00ff88);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.habit-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.habit-act-btn {
+  background: none;
+  border: 1px solid rgba(0,100,200,0.3);
+  color: #006688;
+  font-family: var(--font-main);
+  font-size: 10px;
+  padding: 2px 8px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+
+.habit-act-btn:hover { color: var(--text-cyan); border-color: rgba(0,170,255,0.4); }
+.habit-act-btn.danger:hover { color: var(--pri-alta); border-color: rgba(255,60,60,0.4); }
+
+.habit-drag-handle {
+  cursor: grab;
+  color: #004060;
+  font-size: 12px;
+  margin-right: 4px;
+  user-select: none;
+}
+
+.habit-drag-handle:hover { color: var(--text-cyan); }
+
+.habit-empty {
+  text-align: center;
+  padding: 30px;
+  color: #004060;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Habit Stats Modal */
+.habit-stats-section {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,80,160,0.3);
+}
+
+.habit-stats-title {
+  color: var(--text-cyan);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.habit-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.habit-stat-card {
+  background: rgba(0,0,40,0.8);
+  border: 1px solid rgba(0,100,200,0.3);
+  border-radius: 4px;
+  padding: 6px;
+  text-align: center;
+}
+
+.habit-stat-card .hs-val { font-size: 18px; font-weight: bold; color: var(--text-cyan); }
+.habit-stat-card .hs-lbl { font-size: 9px; color: #006688; }
+
+.habit-month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.habit-month-cell {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: rgba(0,0,20,0.6);
+  border: 1px solid rgba(0,30,60,0.3);
+}
+
+.habit-month-cell.done { background: rgba(0,150,80,0.4); border-color: rgba(0,200,100,0.3); }
+.habit-month-cell.today { border-color: var(--text-cyan); }
+.habit-month-cell.empty { background: transparent; border-color: transparent; }
+
+/* Habit Add - melhorado */
+.habit-add-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 8px;
+}
+
+.habit-add-input {
+  flex: 1;
+  min-width: 100px;
+}
+
+.habit-add-extra {
+  display: flex;
+  gap: 4px;
+  padding: 0 8px 8px;
+  flex-wrap: wrap;
+}
+
+.habit-add-extra select,
+.habit-add-extra input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-light);
+  padding: 4px 6px;
+  font-family: var(--font-main);
+  font-size: 11px;
+  color: var(--text-green);
+  outline: none;
+}
+
+.habit-add-extra select { color: var(--text-yellow); }
+
+/* Edit inline */
+.habit-edit-input {
+  background: var(--bg-input);
+  border: 1px solid var(--text-cyan);
+  padding: 2px 6px;
+  font-family: var(--font-main);
+  font-size: 13px;
+  color: var(--text-cyan);
+  outline: none;
+  width: 100%;
+}
