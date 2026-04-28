@@ -133,7 +133,8 @@ const Habits = (() => {
     });
 
     body.querySelectorAll('.habit-act-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
         var idx = Number(btn.dataset.i);
         var action = btn.dataset.action;
         if (action === 'delete') deleteHabit(idx);
@@ -144,11 +145,17 @@ const Habits = (() => {
     });
 
     body.querySelectorAll('.habit-name.editable').forEach(function(el) {
-      el.addEventListener('dblclick', function() { editHabitName(Number(el.dataset.i)); });
+      el.addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+        editHabitName(Number(el.dataset.i));
+      });
     });
 
     body.querySelectorAll('.habit-icon').forEach(function(el) {
-      el.addEventListener('click', function() { cycleIcon(Number(el.dataset.i)); });
+      el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        cycleIcon(Number(el.dataset.i));
+      });
     });
   }
 
@@ -174,10 +181,16 @@ const Habits = (() => {
     if (goal === 1) {
       setDayCount(h, dateStr, current >= 1 ? 0 : 1);
     } else {
-      if (current >= goal) {
-        setDayCount(h, dateStr, 0);
+      // Para metas > 1, só incrementa no dia de hoje
+      if (dateStr === todayKey()) {
+        if (current >= goal) {
+          setDayCount(h, dateStr, 0);
+        } else {
+          setDayCount(h, dateStr, current + 1);
+        }
       } else {
-        setDayCount(h, dateStr, current + 1);
+        // Dias passados: toggle simples
+        setDayCount(h, dateStr, current >= goal ? 0 : goal);
       }
     }
 
@@ -186,6 +199,9 @@ const Habits = (() => {
       grantXP(h);
       if (typeof Sounds !== 'undefined') Sounds.complete();
       if (typeof Mascot !== 'undefined') Mascot.onTaskCompleted('baixa');
+      if (typeof Notifications !== 'undefined') {
+        Notifications.showToast('🎯 HABITO', (h.icon || '') + ' ' + h.name + ' — Meta atingida!', 'success', 3000);
+      }
     }
 
     save();
