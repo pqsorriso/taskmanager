@@ -976,15 +976,85 @@ const TaskManager = (() => {
 
   // === SEED DEFAULTS ===
   async function seedDefaults() {
+    const now = new Date();
+    const today = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
+    const todayISO = now.toISOString();
+    const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().slice(0, 10);
+    const nextWeek = new Date(now); nextWeek.setDate(nextWeek.getDate() + 7);
+    const nextWeekStr = nextWeek.toISOString().slice(0, 10);
+
+    const base = {
+      done: false, date: today, description: '', dueTime: '', category: '',
+      createdAt: todayISO, subtasks: [], tags: [], project: 'Geral',
+      recurrence: '', comments: [], attachments: [], status: 'todo',
+      dependencies: [], timeSpent: 0, pinned: false, estimate: 0,
+      reminders: [], autoEscalated: false, originalPriority: ''
+    };
+
     const defs = [
-      { text: 'Revisar documentação do projeto', priority: 'alta', done: false, date: '10/04/2026', description: 'Verificar documentação atualizada', dueDate: '2026-04-15', dueTime: '', category: 'trabalho', createdAt: new Date().toISOString(), subtasks: [], tags: [], project: 'Geral', recurrence: '', comments: [], attachments: [], status: 'todo', dependencies: [], timeSpent: 0, pinned: false },
-      { text: 'Configurar sensores da linha de produção', priority: 'alta', done: false, date: '10/04/2026', description: '', dueDate: '2026-04-14', dueTime: '', category: 'manutenção', createdAt: new Date().toISOString(), subtasks: [], tags: [], project: 'Geral', recurrence: '', comments: [], attachments: [], status: 'todo', dependencies: [], timeSpent: 0, pinned: false },
-      { text: 'Atualizar firmware dos controladores', priority: 'media', done: false, date: '10/04/2026', description: 'Versão 3.2.1 disponível', dueDate: '2026-04-18', dueTime: '', category: 'manutenção', createdAt: new Date().toISOString(), subtasks: [], tags: [], project: 'Geral', recurrence: '', comments: [], attachments: [], status: 'todo', dependencies: [], timeSpent: 0, pinned: false },
-      { text: 'Enviar relatório semanal', priority: 'media', done: true, date: '09/04/2026', description: '', dueDate: '2026-04-09', dueTime: '', category: 'trabalho', createdAt: new Date().toISOString(), subtasks: [], tags: [], project: 'Geral', recurrence: '', comments: [], attachments: [], status: 'todo', dependencies: [], timeSpent: 0, pinned: false },
-      { text: 'Organizar mesa de trabalho', priority: 'baixa', done: false, date: '10/04/2026', description: '', dueDate: '', dueTime: '', category: 'pessoal', createdAt: new Date().toISOString(), subtasks: [], tags: [], project: 'Geral', recurrence: '', comments: [], attachments: [], status: 'todo', dependencies: [], timeSpent: 0, pinned: false },
-      { text: 'Backup dos arquivos de rede', priority: 'baixa', done: true, date: '08/04/2026', description: 'Backup incremental', dueDate: '2026-04-08', dueTime: '', category: 'trabalho', createdAt: new Date().toISOString(), subtasks: [], tags: [], project: 'Geral', recurrence: '', comments: [], attachments: [], status: 'todo', dependencies: [], timeSpent: 0, pinned: false },
-      { text: 'Reunião CREA - segunda 14h', priority: 'alta', done: false, date: '13/04/2026', description: 'Registro profissional', dueDate: '2026-04-13', dueTime: '14:00', category: 'reunião', createdAt: new Date().toISOString(), subtasks: [], tags: [], project: 'Geral', recurrence: '', comments: [], attachments: [], status: 'todo', dependencies: [], timeSpent: 0, pinned: false }
+      {
+        ...base,
+        text: '👋 Bem-vindo ao FCEUX Task Manager!',
+        priority: 'alta',
+        pinned: true,
+        description: 'Este é seu gerenciador de tarefas com 115+ features! Explore os botões da toolbar, teste o Pomodoro 🍅, e clique no mascote PIXEL 🤖',
+        subtasks: [
+          { text: 'Marcar esta tarefa como concluída (Espaço)', done: false },
+          { text: 'Criar uma tarefa nova no campo >> acima', done: false },
+          { text: 'Abrir a paleta de comandos (tecla /)', done: false },
+          { text: 'Clicar no mascote PIXEL 3 vezes', done: false },
+          { text: 'Abrir as configurações ⚙️', done: false }
+        ],
+        tags: ['tutorial', 'inicio'],
+        dueDate: ''
+      },
+      {
+        ...base,
+        text: '🎯 Experimente o Modo Foco',
+        priority: 'media',
+        description: 'Selecione esta tarefa e clique em 🎯 FOCO na toolbar. Tela minimalista pra concentrar!',
+        category: 'estudo',
+        dueDate: tomorrowStr
+      },
+      {
+        ...base,
+        text: '🍅 Teste o Pomodoro Timer',
+        priority: 'media',
+        description: 'Clique em 🍅 POMO na toolbar. 25 min de foco → 5 min de pausa. A cada 4 pomos, pausa longa!',
+        category: 'estudo',
+        dueDate: tomorrowStr,
+        estimate: 25
+      },
+      {
+        ...base,
+        text: '⌨️ Aprenda os atalhos do teclado',
+        priority: 'baixa',
+        description: 'F1 = Help | / = Comandos | Ctrl+N = Tarefa rápida | ↑↓ = Navegar | Espaço = Completar',
+        category: 'estudo',
+        tags: ['atalhos'],
+        dueDate: nextWeekStr
+      },
+      {
+        ...base,
+        text: '🤖 Conheça o PIXEL, seu mascote!',
+        priority: 'baixa',
+        description: '1 clique = frase | 3 cliques = personalizar | 10 cliques rápidos = mini-game secreto! Ele reage a tudo que você faz.',
+        category: 'pessoal',
+        tags: ['mascote', 'diversão'],
+        dueDate: ''
+      },
+      {
+        ...base,
+        text: '📋 Tente a linguagem natural',
+        priority: 'media',
+        description: 'No campo >> digite: "estudar react amanhã 14h alta estudo" — o app detecta data, hora, prioridade e categoria automaticamente!',
+        category: 'estudo',
+        dueDate: tomorrowStr,
+        estimate: 10
+      }
     ];
+
     for (const t of defs) await TaskDB.add(t);
   }
 
