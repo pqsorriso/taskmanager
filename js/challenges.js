@@ -94,9 +94,15 @@ const Challenges = (() => {
 
       case 'habitsToday':
         try {
-          const habits = JSON.parse(localStorage.getItem('fceux_habits') || '[]');
-          let count = 0;
-          habits.forEach(h => { if (h.days && h.days[today]) count++; });
+          var habits = JSON.parse(localStorage.getItem('fceux_habits') || '[]');
+          var count = 0;
+          habits.forEach(function(h) {
+            if (!h.log) return;
+            var goal = h.goal || 1;
+            var val = h.log[today];
+            var done = typeof val === 'number' ? val : (val === true ? 1 : 0);
+            if (done >= goal) count++;
+          });
           return count;
         } catch (e) { return 0; }
 
