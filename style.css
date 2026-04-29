@@ -3207,3 +3207,162 @@ input[type="time"],
 input[type="datetime-local"] {
   color-scheme: dark;
 }
+
+/* ================================================================
+88. PIXEL AI — CHAT DO MASCOTE
+================================================================ */
+.pixel-chat-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 17000;
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 20px;
+}
+
+.pixel-chat-overlay.visible { display: flex; }
+
+.pixel-chat-window {
+  background: var(--bg-primary);
+  border: 2px solid rgba(0,170,255,0.4);
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 -4px 32px rgba(0,0,0,0.6);
+  width: 95%;
+  max-width: 420px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-main);
+}
+
+.pixel-chat-header {
+  background: linear-gradient(90deg, #002266, #0044aa);
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 6px 6px 0 0;
+}
+
+.pixel-chat-header .pch-status {
+  font-size: 10px;
+  color: #00ff44;
+}
+
+.pixel-chat-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 200px;
+  max-height: 400px;
+}
+
+.pixel-msg {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  animation: row-fade-in 0.3s ease;
+}
+
+.pixel-msg.bot {
+  align-self: flex-start;
+  background: rgba(0,80,160,0.3);
+  border: 1px solid rgba(0,170,255,0.3);
+  color: var(--text-cyan);
+  border-radius: 8px 8px 8px 2px;
+}
+
+.pixel-msg.user {
+  align-self: flex-end;
+  background: rgba(0,100,50,0.3);
+  border: 1px solid rgba(0,200,100,0.3);
+  color: var(--pri-baixa);
+  border-radius: 8px 8px 2px 8px;
+}
+
+.pixel-msg .pm-time {
+  font-size: 9px;
+  color: #004060;
+  margin-top: 4px;
+  text-align: right;
+}
+
+.pixel-msg.bot .pm-icon {
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+.pixel-typing {
+  align-self: flex-start;
+  color: #006688;
+  font-size: 11px;
+  padding: 4px 0;
+  animation: blink-c 1s step-end infinite;
+}
+
+.pixel-chat-input-row {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(0,80,160,0.3);
+}
+
+.pixel-chat-input {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--border-light);
+  padding: 8px 10px;
+  font-family: var(--font-main);
+  font-size: 13px;
+  color: var(--text-green);
+  outline: none;
+  border-radius: 4px;
+}
+
+.pixel-chat-input:focus { border-color: rgba(0,170,255,0.5); }
+
+.pixel-chat-send {
+  background: #006600;
+  border: 1px solid #008800;
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 13px;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pixel-chat-send:hover { background: #008800; }
+
+.pixel-quick-btns {
+  display: flex;
+  gap: 4px;
+  padding: 0 12px 8px;
+  flex-wrap: wrap;
+}
+
+.pixel-quick-btn {
+  background: rgba(0,0,40,0.8);
+  border: 1px solid rgba(0,100,200,0.3);
+  color: #006688;
+  font-family: var(--font-main);
+  font-size: 10px;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.15s;
+}
+
+.pixel-quick-btn:hover {
+  color: var(--text-cyan);
+  border-color: rgba(0,170,255,0.4);
+}
