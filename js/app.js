@@ -47,6 +47,7 @@
     Backup.init();
     Onboarding.init();
     PixelAI.init();
+    DayPlan.init();
   });
 
   // Som de startup após boot

@@ -116,6 +116,7 @@
       <button class="toolbar-btn" id="btnEisenhower" title="Matriz de Eisenhower">🎯 MATRIX</button>
       <button class="toolbar-btn" id="btnCountdown" title="Countdown">⏳ COUNTDOWN</button>
       <button class="toolbar-btn" id="btnBadges" title="Conquistas">🏆 BADGES</button>
+      <button class="toolbar-btn" id="btnWeekly" title="Relatório Semanal">📊 REPORT</button>
       <button class="toolbar-btn" id="btnAbout" title="Sobre">ℹ️ ABOUT</button>
       <button class="toolbar-btn" id="btnPrint" title="Imprimir lista">🖨️ PRINT</button>
       <button class="toolbar-btn" id="btnFocus" title="Modo Foco">🎯 FOCO</button>
@@ -314,6 +315,7 @@
         <span class="weather-temp" id="weatherTemp">--°C</span>
         <span class="weather-desc" id="weatherDesc">Carregando...</span>
       </div>
+      <span class="dashbar-tip" id="dashbarTip" title="Dica do dia"></span>
       <span id="clockDisplay">00:00:00</span>
     </div>
 
@@ -1228,6 +1230,51 @@
     </div>
   </div>
 
+  <!-- MODO BOSS -->
+  <div class="boss-overlay" id="bossOverlay">
+    <div class="boss-toolbar">
+      <span class="boss-title">📊 Microsoft Excel</span>
+      <div class="boss-tabs">
+        <span class="boss-tab active">Planilha1</span>
+        <span class="boss-tab">Planilha2</span>
+        <span class="boss-tab">+</span>
+      </div>
+    </div>
+    <div class="boss-ribbon">
+      <span>Arquivo</span><span>Início</span><span>Inserir</span><span>Layout</span><span>Fórmulas</span><span>Dados</span><span>Revisão</span><span>Exibição</span>
+    </div>
+    <div class="boss-formula">
+      <span class="bf-cell">A1</span>
+      <span>fx</span>
+      <input class="bf-input" value="=SOMA(B2:B15)" readonly />
+    </div>
+    <div class="boss-grid" id="bossGrid"></div>
+    <div class="boss-status">
+      <span>Pronto</span>
+      <span>Ctrl+B para voltar</span>
+    </div>
+    <div class="boss-hint">Ctrl+B para voltar ao app</div>
+  </div>
+
+  <!-- RELATÓRIO SEMANAL -->
+  <div class="weekly-overlay" id="weeklyOverlay">
+    <div class="weekly-window">
+      <div class="weekly-header">
+        <span>📊 Relatório Semanal</span>
+        <button class="stats-close-btn" id="weeklyCloseBtn">✕</button>
+      </div>
+      <div class="weekly-body" id="weeklyBody"></div>
+    </div>
+  </div>
+
+  <!-- PLANEJAMENTO DO DIA -->
+  <div class="dayplan-popup" id="dayplanPopup">
+    <div class="dp-greeting" id="dpGreeting">☀️ Bom dia!</div>
+    <div class="dp-stats" id="dpStats"></div>
+    <div class="dp-motivation" id="dpMotivation"></div>
+    <button class="dp-dismiss" id="dpDismiss">Bora produzir! 💪</button>
+  </div>
+
   <!-- MATRIX SCREENSAVER -->
   <div class="matrix-screen" id="matrixScreen">
     <canvas id="matrixCanvas"></canvas>
@@ -1338,6 +1385,9 @@
   <script src="js/onboarding.js"></script>
   <script src="js/backup.js"></script>
   <script src="js/pixelai.js"></script>
+  <script src="js/bossmode.js"></script>
+  <script src="js/dayplan.js"></script>
+  <script src="js/weekly.js"></script>
   <script src="js/app.js"></script>
 
 </body>

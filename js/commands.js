@@ -46,6 +46,9 @@ const Commands = (() => {
     { icon: '🏆', label: 'Conquistas / Badges', shortcut: '', action: () => { close(); if (typeof Badges !== 'undefined') Badges.open(); } },
     { icon: '👋', label: 'Tour / Onboarding', shortcut: '', action: () => { close(); if (typeof Onboarding !== 'undefined') Onboarding.show(); } },
     { icon: '💾', label: 'Restaurar backup', shortcut: '', action: () => { close(); if (typeof Backup !== 'undefined') Backup.restore(); } },
+    { icon: '🤖', label: 'Conversar com PIXEL', shortcut: '', action: () => { close(); if (typeof PixelAI !== 'undefined') PixelAI.open(); } },
+    { icon: '🕵️', label: 'Modo Boss (Ctrl+B)', shortcut: 'Ctrl+B', action: () => { close(); BossMode.toggle(); } },
+    { icon: '📊', label: 'Relatório Semanal', shortcut: '', action: () => { close(); Weekly.open(); } },
   ];
 
   function open() {

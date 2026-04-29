@@ -3367,3 +3367,318 @@ input[type="datetime-local"] {
   color: var(--text-cyan);
   border-color: rgba(0,170,255,0.4);
 }
+
+/* ================================================================
+89. MODO BOSS — FAKE SPREADSHEET
+================================================================ */
+.boss-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  z-index: 20000;
+  display: none;
+  flex-direction: column;
+  font-family: Calibri, Arial, sans-serif;
+  color: #333;
+}
+
+.boss-overlay.visible { display: flex; }
+
+.boss-toolbar {
+  background: #217346;
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-size: 12px;
+}
+
+.boss-toolbar .boss-title { font-weight: bold; font-size: 14px; }
+.boss-toolbar .boss-tabs { display: flex; gap: 2px; margin-left: 20px; }
+.boss-toolbar .boss-tab { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 4px 4px 0 0; cursor: pointer; font-size: 11px; }
+.boss-toolbar .boss-tab.active { background: #fff; color: #217346; }
+
+.boss-ribbon {
+  background: #f3f3f3;
+  border-bottom: 1px solid #d4d4d4;
+  padding: 4px 12px;
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  color: #666;
+}
+
+.boss-ribbon span { padding: 2px 6px; cursor: pointer; }
+.boss-ribbon span:hover { background: #e0e0e0; border-radius: 2px; }
+
+.boss-formula {
+  background: #fff;
+  border-bottom: 1px solid #d4d4d4;
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.boss-formula .bf-cell { background: #f0f0f0; padding: 2px 8px; border: 1px solid #ccc; min-width: 40px; text-align: center; }
+.boss-formula .bf-input { flex: 1; border: 1px solid #ccc; padding: 2px 6px; font-size: 12px; }
+
+.boss-grid {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+}
+
+.boss-grid table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+
+.boss-grid th {
+  background: #f0f0f0;
+  border: 1px solid #d4d4d4;
+  padding: 3px 8px;
+  font-weight: normal;
+  color: #666;
+  position: sticky;
+  top: 0;
+  min-width: 80px;
+}
+
+.boss-grid td {
+  border: 1px solid #e0e0e0;
+  padding: 3px 8px;
+  color: #333;
+}
+
+.boss-grid tr:nth-child(even) td { background: #fafafa; }
+.boss-grid .row-num { background: #f0f0f0; color: #666; text-align: center; min-width: 30px; }
+
+.boss-status {
+  background: #217346;
+  padding: 3px 12px;
+  font-size: 10px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.boss-hint {
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  z-index: 20001;
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+.boss-overlay.visible .boss-hint { opacity: 0.3; }
+
+/* ================================================================
+   90. ANIMAÇÕES DE TRANSIÇÃO MODAIS
+   ================================================================ */
+.modal-overlay,
+.habit-overlay,
+.about-overlay,
+.badges-overlay,
+.pixel-chat-overlay {
+  transition: opacity 0.25s ease;
+  opacity: 0;
+}
+
+.modal-overlay.visible,
+.habit-overlay.visible,
+.about-overlay.visible,
+.badges-overlay.visible,
+.pixel-chat-overlay.visible {
+  opacity: 1;
+}
+
+.modal-window,
+.habit-window,
+.about-window,
+.badges-window,
+.pixel-chat-window {
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-overlay.visible .modal-window,
+.habit-overlay.visible .habit-window,
+.about-overlay.visible .about-window,
+.badges-overlay.visible .badges-window,
+.pixel-chat-overlay.visible .pixel-chat-window {
+  transform: scale(1) translateY(0);
+}
+
+/* ================================================================
+   91. DICA DO DIA — DASHBAR
+   ================================================================ */
+.dashbar-tip {
+  font-size: 10px;
+  color: #cc88ff;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.dashbar-tip:hover { color: #ddaaff; }
+
+/* ================================================================
+   92. RELATÓRIO SEMANAL
+   ================================================================ */
+.weekly-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 15000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.weekly-overlay.visible { display: flex; }
+
+.weekly-window {
+  background: var(--bg-primary);
+  border: 2px solid rgba(0,170,255,0.4);
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  width: 95%;
+  max-width: 550px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-main);
+}
+
+.weekly-header {
+  background: linear-gradient(90deg, #004488, #0066cc);
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 4px 4px 0 0;
+}
+
+.weekly-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.weekly-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 120px;
+  margin: 16px 0;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(0,100,200,0.3);
+}
+
+.weekly-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.weekly-bar .wb-fill {
+  width: 30px;
+  background: linear-gradient(0deg, #0066cc, #00aaff);
+  border-radius: 3px 3px 0 0;
+  transition: height 0.5s;
+}
+
+.weekly-bar .wb-val { color: var(--text-cyan); font-size: 11px; }
+.weekly-bar .wb-day { color: #006688; font-size: 10px; }
+.weekly-bar.today .wb-fill { background: linear-gradient(0deg, #00aa44, #00ff66); }
+
+.weekly-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.weekly-stat {
+  background: rgba(0,0,40,0.8);
+  border: 1px solid rgba(0,100,200,0.3);
+  border-radius: 4px;
+  padding: 8px;
+  text-align: center;
+}
+
+.weekly-stat .ws-val { font-size: 20px; font-weight: bold; color: var(--text-cyan); }
+.weekly-stat .ws-lbl { font-size: 9px; color: #006688; }
+
+.weekly-cats {
+  margin: 12px 0;
+}
+
+.weekly-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+  font-size: 11px;
+}
+
+.weekly-cat-row .wc-name { min-width: 80px; color: #006688; }
+.weekly-cat-row .wc-bar { flex: 1; height: 8px; background: rgba(0,0,40,0.6); border-radius: 4px; overflow: hidden; }
+.weekly-cat-row .wc-fill { height: 100%; background: var(--text-cyan); border-radius: 4px; }
+.weekly-cat-row .wc-val { min-width: 30px; text-align: right; color: var(--text-cyan); }
+
+/* ================================================================
+   93. PLANEJAMENTO DO DIA
+   ================================================================ */
+.dayplan-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: rgba(0,0,30,0.98);
+  border: 2px solid rgba(0,170,255,0.4);
+  border-radius: 10px;
+  padding: 24px 30px;
+  z-index: 17500;
+  text-align: center;
+  font-family: var(--font-main);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  max-width: 380px;
+  width: 90%;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dayplan-popup.visible {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.dayplan-popup .dp-greeting { font-size: 20px; color: var(--text-cyan); font-weight: bold; margin-bottom: 12px; }
+.dayplan-popup .dp-stats { font-size: 12px; color: var(--text-green); line-height: 1.8; margin-bottom: 16px; text-align: left; }
+.dayplan-popup .dp-motivation { font-size: 11px; color: #cc88ff; font-style: italic; margin-bottom: 16px; }
+
+.dayplan-popup .dp-dismiss {
+  background: rgba(0,150,80,0.4);
+  border: 1px solid rgba(0,200,100,0.5);
+  color: var(--pri-baixa);
+  font-family: var(--font-main);
+  font-size: 13px;
+  padding: 6px 24px;
+  cursor: pointer;
+  border-radius: 4px;
+}
