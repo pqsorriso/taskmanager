@@ -134,35 +134,47 @@ const Badges = (() => {
     const stats = getStats();
     let newUnlocks = [];
 
-    allBadges.forEach(b => {
+    allBadges.forEach(function(b) {
       if (unlocked[b.id]) return;
-      if (b.check(stats)) {
+      try {
+        if (b.check(stats)) {
         unlocked[b.id] = { date: new Date().toISOString().slice(0, 10) };
         newUnlocks.push(b);
+        }
+      } catch (e) {
+        console.warn('[Badges] Check error:', b.id, e);
       }
     });
 
     if (newUnlocks.length > 0) {
       save();
-      newUnlocks.forEach((b, i) => {
-        setTimeout(() => showUnlockPopup(b), i * 3000);
+      newUnlocks.forEach(function(b, i) {
+        setTimeout(function() { showUnlockPopup(b); }, i * 3000);
       });
     }
   }
 
   function showUnlockPopup(badge) {
-    const popup = document.getElementById('badgeUnlockPopup');
+    var popup = document.getElementById('badgeUnlockPopup');
     if (!popup) return;
 
-    document.getElementById('bupIcon').textContent = badge.icon;
-    document.getElementById('bupName').textContent = badge.name;
-    document.getElementById('bupDesc').textContent = badge.desc;
+    var iconEl = document.getElementById('bupIcon');
+    var nameEl = document.getElementById('bupName');
+    var descEl = document.getElementById('bupDesc');
+
+    if (iconEl) iconEl.textContent = badge.icon;
+    if (nameEl) nameEl.textContent = badge.name;
+    if (descEl) descEl.textContent = badge.desc;
 
     popup.classList.add('visible');
 
     if (typeof Sounds !== 'undefined') Sounds.badge();
 
-    setTimeout(() => popup.classList.remove('visible'), 5000);
+    if (typeof Notifications !== 'undefined') {
+      Notifications.showToast('🏆 CONQUISTA!', badge.icon + ' ' + badge.name + ' — ' + badge.desc, 'success', 5000);
+    }
+
+    setTimeout(function() { popup.classList.remove('visible'); }, 5000);
   }
 
   function open() {
