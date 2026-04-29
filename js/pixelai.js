@@ -767,16 +767,11 @@ var PixelAI = (function() {
   var pqMiniGame = document.getElementById('pqMiniGame');
   if (pqMiniGame) {
     pqMiniGame.addEventListener('click', function() {
-      close();
       addMessage('🎮 Abrindo PIXEL SMASH!', 'bot');
       setTimeout(function() {
-        if (typeof Mascot !== 'undefined') {
-          var overlay = document.getElementById('mascotGameOverlay');
-          if (overlay) {
-            Mascot.setState('celebrate', 1000);
-            // Iniciar mini-game diretamente
-            overlay.classList.add('visible');
-          }
+        close();
+        if (typeof Mascot !== 'undefined' && typeof Mascot.startGame === 'function') {
+          Mascot.startGame();
         }
       }, 500);
     });

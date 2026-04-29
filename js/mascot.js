@@ -817,6 +817,6 @@ const Mascot = (() => {
     init, setState, evaluateState,
     onTaskCompleted, onTaskDeleted, onLevelUp,
     onPomodoroStart, onPomodoroBreak, onPomodoroEnd, onFocusMode,
-    openConfig
+    openConfig, startGame
   };
 })();
