@@ -746,10 +746,38 @@ var PixelAI = (function() {
   var quickBtns = document.querySelectorAll('.pixel-quick-btn');
   quickBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
-      chatInput.value = btn.dataset.msg;
-      send();
+      if (btn.dataset.msg) {
+        chatInput.value = btn.dataset.msg;
+        send();
+      }
     });
   });
+
+  var pqPersonalize = document.getElementById('pqPersonalize');
+  if (pqPersonalize) {
+    pqPersonalize.addEventListener('click', function() {
+      close();
+      if (typeof Mascot !== 'undefined') Mascot.openConfig();
+    });
+  }
+
+  var pqMiniGame = document.getElementById('pqMiniGame');
+  if (pqMiniGame) {
+    pqMiniGame.addEventListener('click', function() {
+      close();
+      addMessage('🎮 Abrindo PIXEL SMASH!', 'bot');
+      setTimeout(function() {
+        if (typeof Mascot !== 'undefined') {
+          var overlay = document.getElementById('mascotGameOverlay');
+          if (overlay) {
+            Mascot.setState('celebrate', 1000);
+            // Iniciar mini-game diretamente
+            overlay.classList.add('visible');
+          }
+        }
+      }, 500);
+    });
+  }
 
   function init() {
     // Proativo a cada 5 minutos

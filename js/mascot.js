@@ -546,23 +546,9 @@ const Mascot = (() => {
     if (clickTimer) clearTimeout(clickTimer);
     clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
 
-    // 10 cliques rápidos = mini game!
-    if (clickCount >= 10) {
-      clickCount = 0;
-      startGame();
-      return;
-    }
-
-    // 3 cliques = abrir chat
-    if (clickCount === 3) {
+    // 2 cliques = abrir chat PIXEL AI
+    if (clickCount === 2) {
       if (typeof PixelAI !== 'undefined') PixelAI.open();
-      clickCount = 0;
-      return;
-    }
-
-    // 5 cliques = abrir personalização
-    if (clickCount === 5) {
-      openConfig();
       clickCount = 0;
       return;
     }
