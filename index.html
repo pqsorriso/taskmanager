@@ -819,6 +819,7 @@
     <div class="habit-window">
       <div class="habit-header">
         <span>🎯 Habit Tracker</span>
+        <button class="stats-close-btn" id="habitStatsBtn" title="Estatísticas">📊</button>
         <button class="stats-close-btn" id="habitCloseBtn">✕</button>
       </div>
       <div class="habit-body" id="habitBody"></div>
@@ -826,6 +827,35 @@
         <div class="habit-add-row">
           <input type="text" class="habit-add-input" id="habitInput" placeholder="Novo hábito..." maxlength="30" />
           <button class="habit-add-btn" id="habitAddBtn">+ ADD</button>
+        </div>
+        <div class="habit-add-extra">
+          <select id="habitIconSel">
+            <option value="🎯">🎯 Alvo</option>
+            <option value="💧">💧 Água</option>
+            <option value="🏃">🏃 Exercício</option>
+            <option value="📖">📖 Leitura</option>
+            <option value="🧘">🧘 Meditação</option>
+            <option value="💊">💊 Remédio</option>
+            <option value="🥗">🥗 Dieta</option>
+            <option value="😴">😴 Sono</option>
+            <option value="📝">📝 Estudo</option>
+            <option value="🚶">🚶 Caminhada</option>
+            <option value="🎸">🎸 Praticar</option>
+            <option value="🧹">🧹 Limpeza</option>
+            <option value="💰">💰 Economizar</option>
+            <option value="📵">📵 Sem celular</option>
+            <option value="✅">✅ Geral</option>
+          </select>
+          <select id="habitCatSel">
+            <option value="">Categoria</option>
+            <option value="saude">🏥 Saúde</option>
+            <option value="fitness">💪 Fitness</option>
+            <option value="produtividade">⚡ Produtividade</option>
+            <option value="estudo">📚 Estudo</option>
+            <option value="pessoal">🌟 Pessoal</option>
+          </select>
+          <input type="number" id="habitGoalInput" placeholder="Meta/dia" min="1" max="99" style="width:65px" />
+          <input type="time" id="habitReminderInput" style="width:80px" />
         </div>
       </div>
     </div>
@@ -1033,9 +1063,20 @@
       </div>
       <div class="countdown-body" id="countdownBody"></div>
       <div class="cd-add-row">
-        <input type="text" id="cdNameInput" placeholder="Nome do evento..." />
-        <input type="date" id="cdDateInput" />
+        <input type="text" id="cdNameInput" placeholder="Nome do evento..." style="flex:1" />
         <button class="cd-add-btn" id="cdAddBtn">+ ADD</button>
+      </div>
+      <div class="cd-add-row" style="padding-top:0">
+        <input type="date" id="cdDateInput" />
+        <input type="time" id="cdTimeInput" placeholder="Horario" />
+        <select id="cdCatInput" style="background:var(--bg-input);border:1px solid var(--border-light);padding:5px;font-family:var(--font-main);font-size:11px;color:var(--text-yellow);outline:none">
+          <option value="">Categoria</option>
+          <option value="trabalho">💼 Trabalho</option>
+          <option value="pessoal">🌟 Pessoal</option>
+          <option value="estudo">📚 Estudo</option>
+          <option value="reuniao">📅 Reuniao</option>
+          <option value="deadline">⏰ Deadline</option>
+        </select>
       </div>
     </div>
   </div>
