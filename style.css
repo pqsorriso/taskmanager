@@ -196,7 +196,8 @@ body::after {
 .edit-body label { display: block; font-size: 12px; font-weight: bold; margin: 8px 0 3px; color: #333; }
 .edit-body label:first-child { margin-top: 0; }
 .edit-body input, .edit-body select, .edit-body textarea { width: 100%; padding: 5px 8px; border: 1px solid #999; font-family: var(--font-main); font-size: 13px; background: #fff; outline: none; }
-.edit-body input[type="time"] { width: 100%; padding: 5px 8px; border: 1px solid #999; font-family: var(--font-main); font-size: 13px; background: #fff; outline: none; }
+.edit-body input[type="time"] { width: 100%; padding: 5px 8px; border: 1px solid #999; font-family: var(--font-main); font-size: 13px; background: #fff; color: #333; outline: none; color-scheme: light; }
+.edit-body input[type="date"] { width: 100%; padding: 5px 8px; border: 1px solid #999; font-family: var(--font-main); font-size: 13px; background: #fff; color: #333; outline: none; color-scheme: light; }
 .edit-body textarea { height: 60px; resize: vertical; }
 .edit-footer { padding: 8px 14px 12px; display: flex; justify-content: center; gap: 10px; }
 .edit-footer button { background: var(--gray-win); border: 2px outset #fff; padding: 4px 24px; font-family: var(--font-ui); font-size: 12px; cursor: pointer; }
