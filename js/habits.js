@@ -370,7 +370,13 @@ const Habits = (() => {
     var iconSel = document.getElementById('habitIconSel');
     var catSel = document.getElementById('habitCatSel');
     var goalInput = document.getElementById('habitGoalInput');
-    var reminderInput = document.getElementById('habitReminderInput');
+    var remHour = document.getElementById('habitReminderHour');
+    var remMin = document.getElementById('habitReminderMin');
+    var reminderVal = '';
+    if (remHour && remMin && remHour.value && remMin.value) {
+      reminderVal = remHour.value + ':' + remMin.value;
+    }
+    var reminderInput = { value: reminderVal };
 
     habits.push({
       name: name,
@@ -386,7 +392,8 @@ const Habits = (() => {
     renderHabits();
 
     if (goalInput) goalInput.value = '';
-    if (reminderInput) reminderInput.value = '';
+    if (remHour) remHour.value = '';
+    if (remMin) remMin.value = '';
     if (catSel) catSel.value = '';
     if (iconSel) iconSel.value = '🎯';
 
