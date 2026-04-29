@@ -471,7 +471,7 @@ var PixelAI = (function() {
 
   function aboutMe(ctx) {
     return '🤖 Eu sou o PIXEL!\n\n' +
-      'Seu assistente robô do FCEUX Task Manager.\n\n' +
+      'Seu assistente robô com IA do FCEUX Task Manager.\n\n' +
       '📊 O que eu faço:\n' +
       '• Analiso suas tarefas e produtividade\n' +
       '• Sugiro o que fazer primeiro\n' +
@@ -479,8 +479,11 @@ var PixelAI = (function() {
       '• Motivo quando você tá cansado\n' +
       '• Conto piadas (ruins) 😅\n' +
       '• Reajo a tudo que acontece no app\n\n' +
-      '🎨 Personalize-me: 3 cliques!\n' +
-      '🎮 Mini-game: 10 cliques rápidos!\n\n' +
+      '💬 Como interagir comigo:\n' +
+      '• 1 clique = frase motivacional\n' +
+      '• 2 cliques = abrir este chat\n' +
+      '• 🎨 Personalizar = botão acima\n' +
+      '• 🎮 Mini-game = botão acima\n\n' +
       'Fui criado em Joinville/SC com ❤️ por Gustavo Nogueira.\n' +
       'Meu objetivo: te ajudar a ser produtivo! 💪🤖';
   }
