@@ -70,17 +70,17 @@ const Badges = (() => {
 
     let stats = {
       totalCreated: tasks.length,
-      totalDone: tasks.filter(t => t.done).length,
-      doneToday: tasks.filter(t => t.done && t.createdAt && t.createdAt.startsWith(today)).length,
+      totalDone: tasks.filter(function(t) { return t.done; }).length,
+      doneToday: tasks.filter(function(t) { return t.done && t.createdAt && t.createdAt.startsWith(today); }).length,
       streak: 0,
       level: 1,
       pomos: parseInt(localStorage.getItem('fceux_pomos_total') || '0'),
       earlyBird: now.getHours() < 7,
       nightOwl: now.getHours() >= 23,
       weekend: now.getDay() === 0 || now.getDay() === 6,
-      altaDone: tasks.filter(t => t.done && t.priority === 'alta').length,
+      altaDone: tasks.filter(function(t) { return t.done && t.priority === 'alta'; }).length,
       speedDemon: false,
-      habitStreak: 0,
+      habitStreak: calcHabitStreak(),
       zeroDays: parseInt(localStorage.getItem('fceux_zero_overdue_days') || '0'),
       mascotClicks: parseInt(localStorage.getItem('fceux_mascot_clicks') || '0'),
       backups: parseInt(localStorage.getItem('fceux_backup_count') || '0'),
@@ -93,11 +93,39 @@ const Badges = (() => {
     }
 
     // Speed demon check
-    tasks.forEach(t => {
+    tasks.forEach(function(t) {
       if (t.done && t.timeSpent && t.timeSpent > 0 && t.timeSpent < 300) {
         stats.speedDemon = true;
       }
     });
+
+    function calcHabitStreak() {
+      try {
+        var habits = JSON.parse(localStorage.getItem('fceux_habits') || '[]');
+        if (!habits.length) return 0;
+        var streak = 0;
+        var d = new Date();
+        d.setHours(0, 0, 0, 0);
+
+        while (true) {
+          var key = d.toISOString().slice(0, 10);
+          var allDone = true;
+          habits.forEach(function(h) {
+            var goal = h.goal || 1;
+            var val = h.log && h.log[key];
+            var count = typeof val === 'number' ? val : (val === true ? 1 : 0);
+            if (count < goal) allDone = false;
+          });
+          if (allDone) {
+            streak++;
+            d.setDate(d.getDate() - 1);
+          } else {
+            break;
+          }
+        }
+        return streak;
+      } catch (e) { return 0; }
+    }
 
     return stats;
   }
