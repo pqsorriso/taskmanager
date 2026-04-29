@@ -49,6 +49,7 @@ const ASSETS = [
   './js/badges.js',
   './js/onboarding.js',
   './js/backup.js',
+  './js/pixelai.js',
 ];
 
 // Install — cacheia tudo

@@ -46,6 +46,7 @@
     Badges.init();
     Backup.init();
     Onboarding.init();
+    PixelAI.init();
   });
 
   // Som de startup após boot

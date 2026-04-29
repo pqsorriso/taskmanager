@@ -553,8 +553,15 @@ const Mascot = (() => {
       return;
     }
 
-    // 3 cliques = abrir personalização
-    if (clickCount === 3) {
+    // 2 cliques = abrir chat
+    if (clickCount === 2) {
+      if (typeof PixelAI !== 'undefined') PixelAI.open();
+      clickCount = 0;
+      return;
+    }
+
+    // 4 cliques = abrir personalização
+    if (clickCount === 4) {
       openConfig();
       clickCount = 0;
       return;
