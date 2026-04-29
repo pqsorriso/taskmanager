@@ -13,7 +13,7 @@ const Onboarding = (() => {
     { icon: '👁️', title: 'Visualizações', text: '☰ Lista — visão padrão\n▦ Kanban — A Fazer → Fazendo → Feito\n📅 Calendário — mês e semana\n🎯 Eisenhower — urgente vs importante' },
     { icon: '🍅', title: 'Produtividade', text: '🍅 Pomodoro com mini timer flutuante\n🎯 Modo Foco — tela minimalista\n⏱ Time Tracking em cada tarefa\n📏 Estimativa vs tempo real\n⏳ Countdown pra deadlines' },
     { icon: '🎮', title: 'Gamificação', text: '⭐ Ganhe XP completando tarefas\n🔥 Mantenha seu streak diário\n🏆 Desbloqueie 30+ conquistas\n🎯 Desafios diários com bônus XP\n🤖 PIXEL evolui com seu nível!' },
-    { icon: '🤖', title: 'Mascote PIXEL', text: 'Seu companheiro robô!\n\n1 clique = frase motivacional\n3 cliques = personalizar\n10 cliques rápidos = mini-game!\n\nEle reage às suas ações, clima e horário.' },
+    { icon: '🤖', title: 'Mascote PIXEL', text: 'Seu companheiro robô com IA!\n\n1 clique = frase motivacional\n2 cliques = abrir PIXEL AI Chat! 💬\n\nConverse com ele! Peça sugestões, relatórios, motivação e até piadas!\n\nDentro do chat: 🎨 Personalizar e 🎮 Mini-game' },
     { icon: '⌨️', title: 'Atalhos', text: 'Ctrl+N — Tarefa rápida\n/ ou Ctrl+K — Paleta de comandos\nF1 — Help completo\n↑↓ — Navegar\nEspaço — Completar\nShift+Click — Seleção múltipla' },
     { icon: '🚀', title: 'Tudo pronto!', text: 'Você tem 110+ features à disposição.\n\nDica: explore o menu ⚙️ CONFIG pra personalizar temas, sons e muito mais.\n\nBoa produtividade! 💪' },
   ];
