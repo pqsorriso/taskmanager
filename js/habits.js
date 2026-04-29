@@ -125,10 +125,15 @@ const Habits = (() => {
     });
 
     body.querySelectorAll('.habit-day').forEach(function(day) {
-      day.addEventListener('click', function() {
-        var hi = Number(day.dataset.hi);
-        var date = day.dataset.date;
-        toggleDay(hi, date);
+      day.addEventListener('click', function(e) {
+        e.stopPropagation();
+        try {
+          var hi = Number(day.dataset.hi);
+          var date = day.dataset.date;
+          toggleDay(hi, date);
+        } catch (err) {
+          console.warn('[Habits] Day click error:', err);
+        }
       });
     });
 
@@ -154,7 +159,11 @@ const Habits = (() => {
     body.querySelectorAll('.habit-icon').forEach(function(el) {
       el.addEventListener('click', function(e) {
         e.stopPropagation();
-        cycleIcon(Number(el.dataset.i));
+        try {
+          cycleIcon(Number(el.dataset.i));
+        } catch (err) {
+          console.warn('[Habits] Icon click error:', err);
+        }
       });
     });
   }
@@ -239,9 +248,13 @@ const Habits = (() => {
   }
 
   function grantXP(h) {
-    if (typeof Gamification !== 'undefined') {
-      var xp = getXPReward(h);
-      Gamification.addBonusXP(xp, (h.icon || '🎯') + ' ' + h.name);
+    try {
+      if (typeof Gamification !== 'undefined' && typeof Gamification.addBonusXP === 'function') {
+        var xp = getXPReward(h);
+        Gamification.addBonusXP(xp, (h.icon || '🎯') + ' ' + h.name);
+      }
+    } catch (e) {
+      console.warn('[Habits] XP error:', e);
     }
   }
 
@@ -279,24 +292,59 @@ const Habits = (() => {
   function editHabit(idx) {
     var h = habits[idx];
     if (!h) return;
+    var body = document.getElementById('habitBody');
+    if (!body) return;
 
-    var newGoal = prompt('Meta diaria para "' + h.name + '":\n(1 = toggle simples, 2+ = contador)', h.goal || 1);
-    if (newGoal === null) return;
-    h.goal = Math.max(1, parseInt(newGoal) || 1);
+    var html = '<div style="padding:12px">';
+    html += '<button class="habit-act-btn" id="habitEditBack" style="margin-bottom:10px">← Voltar</button>';
+    html += '<div class="habit-stats-title">' + (h.icon || '🎯') + ' Editar: ' + escHtml(h.name) + '</div>';
 
-    var newReminder = prompt('Horario de lembrete (HH:MM):\n(vazio = sem lembrete)', h.reminder || '');
-    if (newReminder !== null) h.reminder = newReminder.trim();
+    html += '<div style="margin:10px 0">';
+    html += '<label style="color:#006688;font-size:12px;display:block;margin-bottom:4px">Meta diaria (1 = toggle, 2+ = contador):</label>';
+    html += '<input type="number" id="habitEditGoal" min="1" max="99" value="' + (h.goal || 1) + '" style="background:var(--bg-input);border:1px solid var(--border-light);padding:5px 8px;font-family:var(--font-main);font-size:13px;color:var(--text-green);outline:none;width:80px" />';
+    html += '</div>';
 
-    var cats = ['', 'saude', 'fitness', 'produtividade', 'estudo', 'pessoal'];
-    var currentCat = cats.indexOf(h.category || '');
-    var newCat = prompt('Categoria (0-5):\n0=Nenhuma, 1=Saude, 2=Fitness, 3=Produtividade, 4=Estudo, 5=Pessoal', currentCat >= 0 ? currentCat : 0);
-    if (newCat !== null) {
-      var catIdx = parseInt(newCat);
-      if (catIdx >= 0 && catIdx < cats.length) h.category = cats[catIdx];
-    }
+    html += '<div style="margin:10px 0">';
+    html += '<label style="color:#006688;font-size:12px;display:block;margin-bottom:4px">Horario lembrete (vazio = sem):</label>';
+    html += '<input type="time" id="habitEditReminder" value="' + (h.reminder || '') + '" style="background:var(--bg-input);border:1px solid var(--border-light);padding:5px 8px;font-family:var(--font-main);font-size:13px;color:var(--text-green);outline:none;width:120px" />';
+    html += '</div>';
 
-    save();
-    renderHabits();
+    html += '<div style="margin:10px 0">';
+    html += '<label style="color:#006688;font-size:12px;display:block;margin-bottom:4px">Categoria:</label>';
+    html += '<select id="habitEditCat" style="background:var(--bg-input);border:1px solid var(--border-light);padding:5px 8px;font-family:var(--font-main);font-size:13px;color:var(--text-yellow);outline:none;width:180px">';
+    html += '<option value=""' + (!h.category ? ' selected' : '') + '>Nenhuma</option>';
+    html += '<option value="saude"' + (h.category === 'saude' ? ' selected' : '') + '>🏥 Saude</option>';
+    html += '<option value="fitness"' + (h.category === 'fitness' ? ' selected' : '') + '>💪 Fitness</option>';
+    html += '<option value="produtividade"' + (h.category === 'produtividade' ? ' selected' : '') + '>⚡ Produtividade</option>';
+    html += '<option value="estudo"' + (h.category === 'estudo' ? ' selected' : '') + '>📚 Estudo</option>';
+    html += '<option value="pessoal"' + (h.category === 'pessoal' ? ' selected' : '') + '>🌟 Pessoal</option>';
+    html += '</select>';
+    html += '</div>';
+
+    html += '<button id="habitEditSave" style="background:rgba(0,150,80,0.4);border:1px solid rgba(0,200,100,0.5);color:var(--pri-baixa);font-family:var(--font-main);font-size:13px;padding:6px 24px;cursor:pointer;border-radius:4px;margin-top:8px">💾 Salvar</button>';
+
+    html += '</div>';
+
+    body.innerHTML = html;
+
+    document.getElementById('habitEditBack').addEventListener('click', renderHabits);
+
+    document.getElementById('habitEditSave').addEventListener('click', function() {
+      var goalInput = document.getElementById('habitEditGoal');
+      var reminderInput = document.getElementById('habitEditReminder');
+      var catInput = document.getElementById('habitEditCat');
+
+      h.goal = Math.max(1, parseInt(goalInput.value) || 1);
+      h.reminder = reminderInput.value || '';
+      h.category = catInput.value || '';
+
+      save();
+      renderHabits();
+
+      if (typeof Notifications !== 'undefined') {
+        Notifications.showToast('🎯 HABITO', (h.icon || '') + ' ' + h.name + ' atualizado!', 'success', 3000);
+      }
+    });
   }
 
   function cycleIcon(idx) {
