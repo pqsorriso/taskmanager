@@ -1020,7 +1020,7 @@ const TaskManager = (() => {
           { text: 'Marcar esta tarefa como concluída (Espaço)', done: false },
           { text: 'Criar uma tarefa nova no campo >> acima', done: false },
           { text: 'Abrir a paleta de comandos (tecla /)', done: false },
-          { text: 'Clicar no mascote PIXEL 3 vezes', done: false },
+          { text: 'Clicar no PIXEL 2 vezes pra abrir o chat AI', done: false },
           { text: 'Abrir as configurações ⚙️', done: false }
         ],
         tags: ['tutorial', 'inicio']
@@ -1043,7 +1043,7 @@ const TaskManager = (() => {
         dueDate: nextWeekStr
       }),
       makeTask('🤖 Conheça o PIXEL, seu mascote!', 'baixa', {
-        description: '1 clique = frase | 3 cliques = personalizar | 10 cliques rápidos = mini-game secreto! Ele reage a tudo que você faz.',
+        description: '1 clique = frase | 2 cliques = abrir PIXEL AI Chat! Converse com ele, peça sugestões, motivação e até piadas! 🤖💬',
         category: 'pessoal',
         tags: ['mascote', 'diversão']
       }),
