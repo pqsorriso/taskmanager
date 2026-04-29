@@ -3198,3 +3198,12 @@ body.theme-ocean {
   outline: none;
   width: 100%;
 }
+
+/* ================================================================
+86. FIX — INPUTS DATE/TIME DARK THEME
+================================================================ */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+  color-scheme: dark;
+}
