@@ -353,6 +353,8 @@
           <tr><td>Shift+Click</td><td>Seleção múltipla</td></tr>
           <tr><td>F1</td><td>Abrir / fechar Help</td></tr>
           <tr><td>Esc</td><td>Fechar modais</td></tr>
+          <tr><td>2 cliques</td><td>Abrir chat com PIXEL AI</td></tr>
+          <tr><td>4 cliques</td><td>Abrir personalização do PIXEL AI</td></tr>
         </table>
 
         <h3>📋 Tarefas</h3>
@@ -855,7 +857,22 @@
             <option value="pessoal">🌟 Pessoal</option>
           </select>
           <input type="number" id="habitGoalInput" placeholder="Meta/dia" min="1" max="99" style="width:65px" />
-          <input type="time" id="habitReminderInput" style="width:80px" />
+          <div class="time-picker">
+            <span class="tp-icon">⏰</span>
+            <select id="habitReminderHour">
+              <option value="">HH</option>
+              <option>00</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option>
+              <option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option>
+              <option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option>
+              <option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option>
+            </select>
+            <span class="tp-sep">:</span>
+            <select id="habitReminderMin">
+              <option value="">MM</option>
+              <option>00</option><option>05</option><option>10</option><option>15</option><option>20</option><option>25</option>
+              <option>30</option><option>35</option><option>40</option><option>45</option><option>50</option><option>55</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -1068,7 +1085,22 @@
       </div>
       <div class="cd-add-row" style="padding-top:0">
         <input type="date" id="cdDateInput" />
-        <input type="time" id="cdTimeInput" placeholder="Horario" />
+        <div class="time-picker">
+          <span class="tp-icon">⏰</span>
+          <select id="cdTimeHour">
+            <option value="">HH</option>
+            <option>00</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option>
+            <option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option>
+            <option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option>
+            <option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option>
+          </select>
+          <span class="tp-sep">:</span>
+          <select id="cdTimeMin">
+            <option value="">MM</option>
+            <option>00</option><option>05</option><option>10</option><option>15</option><option>20</option><option>25</option>
+            <option>30</option><option>35</option><option>40</option><option>45</option><option>50</option><option>55</option>
+          </select>
+        </div>
         <select id="cdCatInput" style="background:var(--bg-input);border:1px solid var(--border-light);padding:5px;font-family:var(--font-main);font-size:11px;color:var(--text-yellow);outline:none">
           <option value="">Categoria</option>
           <option value="trabalho">💼 Trabalho</option>
@@ -1155,6 +1187,32 @@
 
   <!-- BACKUP BADGE -->
   <div class="backup-badge" id="backupBadge">💾 Backup salvo</div>
+
+  <!-- PIXEL AI CHAT -->
+  <div class="pixel-chat-overlay" id="pixelChatOverlay">
+    <div class="pixel-chat-window">
+      <div class="pixel-chat-header">
+        <span>🤖 PIXEL AI</span>
+        <span class="pch-status">● online</span>
+        <button class="stats-close-btn" id="pixelChatClose">✕</button>
+      </div>
+      <div class="pixel-chat-body" id="pixelChatBody"></div>
+      <div class="pixel-quick-btns" id="pixelQuickBtns">
+        <button class="pixel-quick-btn" data-msg="como estou hoje?">📊 Meu dia</button>
+        <button class="pixel-quick-btn" data-msg="o que fazer agora?">🎯 Sugestão</button>
+        <button class="pixel-quick-btn" data-msg="estou cansado">😴 Cansado</button>
+        <button class="pixel-quick-btn" data-msg="me motive">💪 Motivar</button>
+        <button class="pixel-quick-btn" data-msg="como está meu streak?">🔥 Streak</button>
+        <button class="pixel-quick-btn" data-msg="quais tarefas vencem hoje?">⏰ Urgentes</button>
+        <button class="pixel-quick-btn" data-msg="piada">😂 Piada</button>
+        <button class="pixel-quick-btn" data-msg="quem é você?">🤖 Sobre</button>
+      </div>
+      <div class="pixel-chat-input-row">
+        <input type="text" class="pixel-chat-input" id="pixelChatInput" placeholder="Fale com o PIXEL..." maxlength="100" />
+        <button class="pixel-chat-send" id="pixelChatSend">▶</button>
+      </div>
+    </div>
+  </div>
 
   <!-- MATRIX SCREENSAVER -->
   <div class="matrix-screen" id="matrixScreen">
@@ -1265,6 +1323,7 @@
   <script src="js/badges.js"></script>
   <script src="js/onboarding.js"></script>
   <script src="js/backup.js"></script>
+  <script src="js/pixelai.js"></script>
   <script src="js/app.js"></script>
 
 </body>
