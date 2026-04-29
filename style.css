@@ -2908,6 +2908,24 @@ body.theme-ocean {
 }
 
 /* ================================================================
+53. HABIT TRACKER — BASE
+================================================================ */
+.habit-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:15000; display:none; justify-content:center; align-items:center; padding:20px; }
+.habit-overlay.visible { display:flex; }
+.habit-window { background:var(--bg-primary); border:2px solid rgba(0,170,255,0.4); border-radius:6px; box-shadow:0 8px 32px rgba(0,0,0,0.6); width:95%; max-width:550px; max-height:85vh; display:flex; flex-direction:column; font-family:var(--font-main); }
+.habit-header { background:linear-gradient(90deg,#006600,#009900); padding:8px 12px; display:flex; justify-content:space-between; align-items:center; color:#fff; font-size:13px; border-radius:4px 4px 0 0; }
+.habit-body { flex:1; overflow-y:auto; padding:12px; }
+.habit-footer { padding:8px 12px; border-top:1px solid rgba(0,80,160,0.3); }
+.habit-add-btn { background:#008000; border:1px solid #00a000; color:#fff; font-family:var(--font-main); font-size:13px; padding:5px 14px; cursor:pointer; }
+.habit-add-btn:hover { background:#00a800; }
+.habit-add-row { display:flex; gap:6px; }
+.habit-add-input { flex:1; min-width:100px; background:var(--bg-input); border:1px solid var(--border-light); padding:5px 8px; font-family:var(--font-main); font-size:13px; color:var(--text-green); outline:none; }
+.habit-add-extra { display:flex; gap:4px; padding:6px 0 0; flex-wrap:wrap; }
+.habit-add-extra select, .habit-add-extra input { background:var(--bg-input); border:1px solid var(--border-light); padding:4px 6px; font-family:var(--font-main); font-size:11px; color:var(--text-green); outline:none; }
+.habit-add-extra select { color:var(--text-yellow); }
+.habit-empty { text-align:center; padding:30px; color:#004060; font-size:13px; line-height:1.6; }
+
+/* ================================================================
 85. HABITS — MELHORIAS COMPLETAS
 ================================================================ */
 .habit-item {
