@@ -14,8 +14,8 @@ const Onboarding = (() => {
     { icon: '🍅', title: 'Produtividade', text: '🍅 Pomodoro com mini timer flutuante\n🎯 Modo Foco — tela minimalista\n⏱ Time Tracking em cada tarefa\n📏 Estimativa vs tempo real\n⏳ Countdown pra deadlines' },
     { icon: '🎮', title: 'Gamificação', text: '⭐ Ganhe XP completando tarefas\n🔥 Mantenha seu streak diário\n🏆 Desbloqueie 30+ conquistas\n🎯 Desafios diários com bônus XP\n🤖 PIXEL evolui com seu nível!' },
     { icon: '🤖', title: 'Mascote PIXEL', text: 'Seu companheiro robô com IA!\n\n1 clique = frase motivacional\n2 cliques = abrir PIXEL AI Chat! 💬\n\nConverse com ele! Peça sugestões, relatórios, motivação e até piadas!\n\nDentro do chat: 🎨 Personalizar e 🎮 Mini-game' },
-    { icon: '⌨️', title: 'Atalhos', text: 'Ctrl+N — Tarefa rápida\n/ ou Ctrl+K — Paleta de comandos\nF1 — Help completo\n↑↓ — Navegar\nEspaço — Completar\nShift+Click — Seleção múltipla' },
-    { icon: '🚀', title: 'Tudo pronto!', text: 'Você tem 110+ features à disposição.\n\nDica: explore o menu ⚙️ CONFIG pra personalizar temas, sons e muito mais.\n\nBoa produtividade! 💪' },
+    { icon: '⌨️', title: 'Atalhos', text: 'Ctrl+N — Tarefa rápida\n/ ou Ctrl+K — Paleta de comandos\nCtrl+B — Modo Boss (planilha fake!)\nF1 — Help completo\n↑↓ — Navegar\nEspaço — Completar\nShift+Click — Seleção múltipla' },
+    { icon: '🚀', title: 'Tudo pronto!', text: 'Você tem 130+ features à disposição!\n\n📅 Exporte tarefas pro Outlook\n📊 Veja seu relatório semanal\n🕵️ Ctrl+B = Modo Boss\n⚙️ CONFIG pra personalizar tudo\n\nBoa produtividade! 💪' },
   ];
 
   function show() {
