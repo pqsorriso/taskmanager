@@ -33,6 +33,7 @@ const AutoScale = (() => {
     if (typeof Config !== 'undefined' && !Config.get('autoScale')) return;
 
     const tasks = TaskManager.getAll();
+    var today = new Date().toISOString().slice(0, 10);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     let changed = false;
@@ -50,6 +51,9 @@ const AutoScale = (() => {
       // Média → Alta quando faltam 2 dias ou menos
       const scaleMedia = typeof Config !== 'undefined' ? (Config.get('scaleMedia') || 2) : 2;
       const scaleBaixa = typeof Config !== 'undefined' ? (Config.get('scaleBaixa') || 3) : 3;
+
+      // Não escalar tarefas recorrentes diárias/úteis
+      if (t.recurrence === 'daily' || t.recurrence === 'weekdays') continue;
 
       if (t.priority === 'media' && daysLeft <= scaleMedia && daysLeft >= 0) {
         newPriority = 'alta';

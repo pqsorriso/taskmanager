@@ -769,7 +769,7 @@ const TaskManager = (() => {
 
         const newTask = {
           text: t.text,
-          priority: t.priority,
+          priority: t.originalPriority || t.priority,
           done: false,
           date: date,
           description: t.description || '',
@@ -786,7 +786,9 @@ const TaskManager = (() => {
           status: 'todo',
           dependencies: [],
           timeSpent: 0,
-          pinned: false
+          pinned: false,
+          autoEscalated: false,
+          originalPriority: '',
         };
 
         const newId = await TaskDB.add(newTask);
