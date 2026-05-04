@@ -1036,8 +1036,8 @@ const TaskUI = (() => {
   var editExportICS = document.getElementById('editExportICS');
   if (editExportICS) {
     editExportICS.addEventListener('click', function() {
-      if (typeof Outlook !== 'undefined' && currentEditId) {
-        var task = TaskManager.getTaskById(currentEditId);
+      if (typeof Outlook !== 'undefined' && editingId) {
+        var task = TaskManager.getTaskById(editingId);
         if (task) Outlook.exportICS(task);
       }
     });
