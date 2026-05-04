@@ -1046,8 +1046,8 @@ const TaskUI = (() => {
   var editSendEmail = document.getElementById('editSendEmail');
   if (editSendEmail) {
     editSendEmail.addEventListener('click', function() {
-      if (typeof Outlook !== 'undefined' && currentEditId) {
-        var task = TaskManager.getTaskById(currentEditId);
+      if (typeof Outlook !== 'undefined' && editingId) {
+        var task = TaskManager.getTaskById(editingId);
         if (task) Outlook.sendEmail(task);
       }
     });
