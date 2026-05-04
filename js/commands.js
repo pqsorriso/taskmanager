@@ -49,6 +49,8 @@ const Commands = (() => {
     { icon: '🤖', label: 'Conversar com PIXEL', shortcut: '', action: () => { close(); if (typeof PixelAI !== 'undefined') PixelAI.open(); } },
     { icon: '🕵️', label: 'Modo Boss (Ctrl+B)', shortcut: 'Ctrl+B', action: () => { close(); BossMode.toggle(); } },
     { icon: '📊', label: 'Relatório Semanal', shortcut: '', action: () => { close(); Weekly.open(); } },
+    { icon: '📅', label: 'Exportar dia pro Outlook (.ics)', shortcut: '', action: () => { close(); if (typeof Outlook !== 'undefined') Outlook.exportDayICS(); } },
+    { icon: '📧', label: 'Enviar resumo por email', shortcut: '', action: () => { close(); if (typeof Outlook !== 'undefined') Outlook.emailDaySummary(); } },
   ];
 
   function open() {

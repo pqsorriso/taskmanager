@@ -3683,3 +3683,49 @@ input[type="datetime-local"] {
   cursor: pointer;
   border-radius: 4px;
 }
+
+/* ================================================================
+   94. INTEGRAÇÃO OUTLOOK — EXPORT ICS + EMAIL
+   ================================================================ */
+.task-outlook-btn {
+  background: none;
+  border: 1px solid rgba(0,100,200,0.3);
+  color: #006688;
+  font-size: 12px;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+
+.task-outlook-btn:hover {
+  color: var(--text-cyan);
+  border-color: rgba(0,170,255,0.4);
+}
+
+.outlook-menu {
+  position: absolute;
+  background: var(--bg-primary);
+  border: 1px solid rgba(0,170,255,0.4);
+  border-radius: 4px;
+  padding: 4px 0;
+  z-index: 16000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  display: none;
+  font-family: var(--font-main);
+}
+
+.outlook-menu.visible { display: block; }
+
+.outlook-menu-item {
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--text-green);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.outlook-menu-item:hover {
+  background: rgba(0,80,160,0.3);
+  color: var(--text-cyan);
+}

@@ -53,6 +53,7 @@ const ASSETS = [
   './js/bossmode.js',
   './js/dayplan.js',
   './js/weekly.js',
+  './js/outlook.js',
 ];
 
 // Install — cacheia tudo

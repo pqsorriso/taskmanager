@@ -66,6 +66,7 @@ const BootScreen = (() => {
     { text: 'Backup...                 ', check: function() { return check('Backup', function() { return typeof Backup !== 'undefined'; }); } },
     { text: 'BossMode...               ', check: function() { return check('BossMode', function() { return typeof BossMode !== 'undefined'; }); } },
     { text: 'DayPlan...                ', check: function() { return check('DayPlan', function() { return typeof DayPlan !== 'undefined'; }); } },
+    { text: 'Outlook...                ', check: function() { return check('Outlook', function() { return typeof Outlook !== 'undefined'; }); } },
     { text: '', check: null },
     { text: 'RESULTADO_FINAL', check: null },
   ];

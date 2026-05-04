@@ -1032,6 +1032,27 @@ const TaskUI = (() => {
     });
   }
 
+  // === OUTLOOK ===
+  var editExportICS = document.getElementById('editExportICS');
+  if (editExportICS) {
+    editExportICS.addEventListener('click', function() {
+      if (typeof Outlook !== 'undefined' && currentEditId) {
+        var task = TaskManager.getTaskById(currentEditId);
+        if (task) Outlook.exportICS(task);
+      }
+    });
+  }
+
+  var editSendEmail = document.getElementById('editSendEmail');
+  if (editSendEmail) {
+    editSendEmail.addEventListener('click', function() {
+      if (typeof Outlook !== 'undefined' && currentEditId) {
+        var task = TaskManager.getTaskById(currentEditId);
+        if (task) Outlook.sendEmail(task);
+      }
+    });
+  }
+
   // === ABOUT ===
   const aboutCloseBtn = document.getElementById('aboutCloseBtn');
   if (aboutCloseBtn) aboutCloseBtn.addEventListener('click', () => {

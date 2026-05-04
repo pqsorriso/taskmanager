@@ -117,6 +117,7 @@
       <button class="toolbar-btn" id="btnCountdown" title="Countdown">⏳ COUNTDOWN</button>
       <button class="toolbar-btn" id="btnBadges" title="Conquistas">🏆 BADGES</button>
       <button class="toolbar-btn" id="btnWeekly" title="Relatório Semanal">📊 REPORT</button>
+      <button class="toolbar-btn" id="btnOutlookDay" title="Exportar dia pro Outlook">📅 OUTLOOK</button>
       <button class="toolbar-btn" id="btnAbout" title="Sobre">ℹ️ ABOUT</button>
       <button class="toolbar-btn" id="btnPrint" title="Imprimir lista">🖨️ PRINT</button>
       <button class="toolbar-btn" id="btnFocus" title="Modo Foco">🎯 FOCO</button>
@@ -600,6 +601,10 @@
           <button class="subtask-add-btn" id="depAddBtn">+</button>
         </div>
       </div>
+        <div style="display:flex;gap:6px;margin:8px 0">
+          <button class="task-outlook-btn" id="editExportICS">📅 Exportar Calendário</button>
+          <button class="task-outlook-btn" id="editSendEmail">📧 Enviar por Email</button>
+        </div>
       <div class="edit-footer">
         <button id="editDuplicateBtn" style="background:#c0c0c0;border:2px outset #fff;padding:4px 14px;font-family:'Segoe UI',sans-serif;font-size:12px;cursor:pointer">📋 Duplicar</button>
         <button id="editSaveBtn">💾 Salvar</button>
@@ -1388,6 +1393,7 @@
   <script src="js/bossmode.js"></script>
   <script src="js/dayplan.js"></script>
   <script src="js/weekly.js"></script>
+  <script src="js/outlook.js"></script>
   <script src="js/app.js"></script>
 
 </body>
