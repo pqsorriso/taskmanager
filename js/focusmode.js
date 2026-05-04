@@ -107,16 +107,28 @@ const FocusMode = (() => {
     }, 1000);
   }
 
-  function togglePause() {
+    function togglePause() {
     if (!running) return;
     if (paused) {
       paused = false;
       document.getElementById('focusPauseBtn').textContent = '⏸ PAUSAR';
-      start();
+      document.getElementById('focusStartBtn').textContent = '▶ RODANDO';
+      interval = setInterval(function() {
+        timeLeft--;
+        updateDisplay();
+        if (timeLeft <= 60 && !isBreak) {
+          timerEl.classList.add('warning');
+        }
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          onPhaseEnd();
+        }
+      }, 1000);
     } else {
       paused = true;
       clearInterval(interval);
       document.getElementById('focusPauseBtn').textContent = '▶ RETOMAR';
+      document.getElementById('focusStartBtn').textContent = '⏸ PAUSADO';
     }
   }
 
