@@ -29,11 +29,9 @@ const AutoScale = (() => {
   }
 
   async function check() {
-    // Verificar se auto-escala está ativado
     if (typeof Config !== 'undefined' && !Config.get('autoScale')) return;
 
     const tasks = TaskManager.getAll();
-    var today = new Date().toISOString().slice(0, 10);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     let changed = false;
@@ -48,7 +46,6 @@ const AutoScale = (() => {
       let newPriority = null;
       let reason = '';
 
-      // Média → Alta quando faltam 2 dias ou menos
       const scaleMedia = typeof Config !== 'undefined' ? (Config.get('scaleMedia') || 2) : 2;
       const scaleBaixa = typeof Config !== 'undefined' ? (Config.get('scaleBaixa') || 3) : 3;
 
@@ -60,13 +57,11 @@ const AutoScale = (() => {
         reason = 'Faltam ' + daysLeft + ' dia(s)!';
       }
 
-      // Baixa → Média quando faltam 3 dias ou menos
       if (t.priority === 'baixa' && daysLeft <= scaleBaixa && daysLeft >= 0) {
         newPriority = 'media';
         reason = 'Faltam ' + daysLeft + ' dia(s)!';
       }
 
-      // Qualquer → Alta quando está atrasada
       if (daysLeft < 0 && t.priority !== 'alta') {
         newPriority = 'alta';
         reason = 'Atrasada ' + Math.abs(daysLeft) + ' dia(s)!';
@@ -100,9 +95,7 @@ const AutoScale = (() => {
 
   function init() {
     load();
-    // Verificar ao iniciar
     setTimeout(check, 3000);
-    // Verificar a cada 15 minutos
     setInterval(check, 900000);
   }
 
