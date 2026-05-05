@@ -75,6 +75,14 @@ const FocusMode = (() => {
   }
 
   function close() {
+    if (running && !paused) {
+      // Bloquear saída enquanto focando
+      if (typeof Notifications !== 'undefined') {
+        Notifications.showToast('🔒 FOCO ATIVO', 'Termine ou pause a sessão antes de sair!', 'warn', 3000);
+      }
+      if (typeof Sounds !== 'undefined') Sounds.click();
+      return;
+    }
     overlay.classList.remove('visible');
     hideTimePicker();
     if (!running) {
@@ -430,6 +438,12 @@ const FocusMode = (() => {
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && overlay && overlay.classList.contains('visible')) {
+      if (running && !paused) {
+        if (typeof Notifications !== 'undefined') {
+          Notifications.showToast('🔒 FOCO ATIVO', 'Pause ou conclua antes de sair!', 'warn', 3000);
+        }
+        return;
+      }
       close();
     }
   });
