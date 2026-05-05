@@ -186,8 +186,16 @@ const Challenges = (() => {
 
       if (typeof Mascot !== 'undefined') {
         Mascot.setState('celebrate', 4000);
-        Mascot.showBubble && Mascot.showBubble('DESAFIO COMPLETO! 🎯🏆');
       }
+
+      // Após 15 segundos, trocar pro próximo desafio
+      setTimeout(function() {
+        challenge.completed = true;
+        challenge.rewarded = true;
+        save();
+        loadNextChallenge();
+      }, 15000);
+
     } else if (isComplete) {
       if (pctEl) { pctEl.textContent = '✅'; pctEl.className = 'challenge-pct challenge-complete'; }
     } else {
@@ -195,6 +203,64 @@ const Challenges = (() => {
     }
 
     if (bar) bar.classList.add('visible');
+  }
+
+  function loadNextChallenge() {
+    var today = getTodayStr();
+    var usedIds = [];
+    try {
+      var history = JSON.parse(localStorage.getItem('fceux_challenge_history') || '[]');
+      usedIds = history.filter(function(h) { return h.date === today; }).map(function(h) { return h.id; });
+    } catch(e) {}
+
+    // Pegar próximo desafio que não foi usado hoje
+    var available = challenges.filter(function(c) { return usedIds.indexOf(c.id) === -1; });
+
+    if (available.length === 0) {
+      // Todos os desafios do dia foram completados!
+      var bar = document.getElementById('challengeBar');
+      var iconEl = document.getElementById('challengeIcon');
+      var nameEl = document.getElementById('challengeName');
+      var rewardEl = document.getElementById('challengeReward');
+      var fillEl = document.getElementById('challengeFill');
+      var pctEl = document.getElementById('challengePct');
+
+      if (iconEl) iconEl.textContent = '🏆';
+      if (nameEl) nameEl.textContent = 'Todos os desafios completos!';
+      if (rewardEl) rewardEl.textContent = 'INCRÍVEL!';
+      if (fillEl) fillEl.style.width = '100%';
+      if (pctEl) { pctEl.textContent = '🏆'; pctEl.className = 'challenge-pct'; }
+      return;
+    }
+
+    // Sortear próximo
+    var next = available[Math.floor(Math.random() * available.length)];
+
+    // Salvar no histórico
+    try {
+      var history = JSON.parse(localStorage.getItem('fceux_challenge_history') || '[]');
+      history.push({ id: challenge.id, date: today });
+      localStorage.setItem('fceux_challenge_history', JSON.stringify(history));
+    } catch(e) {}
+
+    // Atualizar desafio atual
+    challenge = {
+      id: next.id,
+      text: next.text,
+      icon: next.icon,
+      target: next.target,
+      check: next.check,
+      xp: next.xp,
+      completed: false,
+      rewarded: false,
+      date: today
+    };
+    save();
+    update();
+
+    if (typeof Notifications !== 'undefined') {
+      Notifications.showToast('🎯 NOVO DESAFIO!', next.icon + ' ' + next.text + ' → +' + next.xp + ' XP', 'info', 5000);
+    }
   }
 
   // Binds
