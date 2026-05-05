@@ -54,6 +54,7 @@ const ASSETS = [
   './js/dayplan.js',
   './js/weekly.js',
   './js/outlook.js',
+  './js/sessioncomplete.js',
 ];
 
 // Install — cacheia tudo

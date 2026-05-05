@@ -158,6 +158,13 @@ const FocusMode = (() => {
         Notifications.showToast('🍅 FOCO', 'Sessão concluída! Pausa.', 'success', 5000);
       }
 
+      // Tela de conclusão
+      var focusWorkMin = typeof Config !== 'undefined' ? (Config.get('pomoFocus') || 25) : 25;
+      var focusTaskName = document.getElementById('focusTaskName') ? document.getElementById('focusTaskName').textContent : '';
+      if (typeof SessionComplete !== 'undefined') {
+        SessionComplete.showFocusComplete(focusTaskName, focusWorkMin);
+      }
+
       isBreak = true;
       const breakMin = typeof Config !== 'undefined' ? (Config.get('pomoPause') || 5) : 5;
       timeLeft = breakMin * 60;

@@ -692,6 +692,24 @@
         <div class="pomo-info-item"><div class="pi-val" id="pomoWeekCount">0</div><div class="pi-lbl">SEMANA</div></div>
         <div class="pomo-info-item"><div class="pi-val" id="pomoTotalCount">0</div><div class="pi-lbl">TOTAL</div></div>
       </div>
+      <div class="session-complete" id="pomoComplete">
+        <div class="sc-trophy">🏆</div>
+        <div class="sc-title">SESSÃO CONCLUÍDA!</div>
+        <div class="sc-task" id="pomoCompleteTask"></div>
+        <div class="sc-stats" id="pomoCompleteStats"></div>
+        <div class="sc-rating" id="pomoCompleteRating">
+          <span class="sc-star" data-rate="1">⭐</span>
+          <span class="sc-star" data-rate="2">⭐</span>
+          <span class="sc-star" data-rate="3">⭐</span>
+          <span class="sc-star" data-rate="4">⭐</span>
+          <span class="sc-star" data-rate="5">⭐</span>
+        </div>
+        <div class="sc-quote" id="pomoCompleteQuote"></div>
+        <div class="sc-buttons">
+          <button class="sc-btn primary" id="pomoNewCycle">🔄 Novo Ciclo</button>
+          <button class="sc-btn secondary" id="pomoCloseComplete">✕ Fechar</button>
+        </div>
+      </div>
       <div class="pomo-close" id="pomoClose">✕ Fechar</div>
     </div>
   </div>
@@ -1038,6 +1056,24 @@
   </div>
 
   <!-- MODO FOCO -->
+      <div class="session-complete" id="focusComplete">
+        <div class="sc-trophy">🎯</div>
+        <div class="sc-title">FOCO CONCLUÍDO!</div>
+        <div class="sc-task" id="focusCompleteTask"></div>
+        <div class="sc-stats" id="focusCompleteStats"></div>
+        <div class="sc-rating" id="focusCompleteRating">
+          <span class="sc-star" data-rate="1">⭐</span>
+          <span class="sc-star" data-rate="2">⭐</span>
+          <span class="sc-star" data-rate="3">⭐</span>
+          <span class="sc-star" data-rate="4">⭐</span>
+          <span class="sc-star" data-rate="5">⭐</span>
+        </div>
+        <div class="sc-quote" id="focusCompleteQuote"></div>
+        <div class="sc-buttons">
+          <button class="sc-btn primary" id="focusNewCycle">🔄 Novo Ciclo</button>
+          <button class="sc-btn secondary" id="focusCloseComplete">✕ Fechar</button>
+        </div>
+      </div>
   <div class="focus-overlay" id="focusOverlay">
     <div class="focus-close" id="focusClose">ESC para sair</div>
     <div class="focus-task-label" id="focusLabel">TAREFA ATUAL</div>
@@ -1421,6 +1457,7 @@
   <script src="js/dayplan.js"></script>
   <script src="js/weekly.js"></script>
   <script src="js/outlook.js"></script>
+  <script src="js/sessioncomplete.js"></script>
   <script src="js/app.js"></script>
 
 </body>

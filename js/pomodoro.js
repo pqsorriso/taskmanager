@@ -326,6 +326,11 @@ const Pomodoro = (() => {
         Gamification.addBonusXP(15, 'Pomodoro completo');
       }
 
+      // Tela de conclusão
+      if (typeof SessionComplete !== 'undefined') {
+        SessionComplete.showPomoComplete(currentTaskName, getWorkMin());
+      }
+
       // Iniciar pausa
       isBreak = true;
       const breakMin = isLongBreak ? getLongBreakMin() : getBreakMin();
