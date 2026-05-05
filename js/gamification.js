@@ -134,9 +134,9 @@ const Gamification = (() => {
   }
 
     function addBonusXP(amount, reason) {
-    xp += amount;
+    data.xp += amount;
     save();
-    updateBar();
+    renderXPBar();
 
     if (typeof Notifications !== 'undefined') {
       Notifications.showToast('⭐ BÔNUS XP', '+' + amount + ' XP! ' + reason, 'success', 3000);
