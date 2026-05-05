@@ -415,6 +415,19 @@ const FocusMode = (() => {
   var resetBtn = document.getElementById('focusResetBtn');
   if (resetBtn) resetBtn.addEventListener('click', reset);
 
+  var completeBtn = document.getElementById('focusCompleteBtn');
+  if (completeBtn) {
+    completeBtn.addEventListener('click', function() {
+      if (!running) return;
+      clearInterval(interval);
+      var elapsed = totalTime - timeLeft;
+      var elapsedMin = Math.max(1, Math.ceil(elapsed / 60));
+      totalTime = elapsed;
+      timeLeft = 0;
+      onComplete();
+    });
+  }
+
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && overlay && overlay.classList.contains('visible')) {
       close();
