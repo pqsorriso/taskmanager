@@ -730,6 +730,11 @@ const TaskManager = (() => {
     }
 
     t.done = !t.done;
+    if (t.done) {
+      t.completedAt = new Date().toISOString();
+    } else {
+      t.completedAt = '';
+    }
     await TaskDB.update(t);
 
     // Gamification XP

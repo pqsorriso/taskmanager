@@ -27,7 +27,12 @@ var Weekly = (function() {
       var d = new Date(today);
       d.setDate(d.getDate() - i);
       var key = d.toISOString().slice(0, 10);
-      var done = tasks.filter(function(t) { return t.done && t.createdAt && t.createdAt.startsWith(key); }).length;
+      var done = tasks.filter(function(t) {
+        if (!t.done) return false;
+        if (t.completedAt && t.completedAt.startsWith(key)) return true;
+        if (t.createdAt && t.createdAt.startsWith(key)) return true;
+        return false;
+      }).length;
       if (done > maxDone) maxDone = done;
       days.push({ date: key, day: dayNames[d.getDay()], done: done, isToday: key === todayStr });
     }

@@ -127,7 +127,12 @@ var DayPlan = (function() {
   function showDaySummary() {
     var tasks = typeof TaskManager !== 'undefined' ? TaskManager.getAll() : [];
     var today = getTodayStr();
-    var doneToday = tasks.filter(function(t) { return t.done && t.createdAt && t.createdAt.startsWith(today); });
+    var doneToday = tasks.filter(function(t) {
+      if (!t.done) return false;
+      if (t.completedAt && t.completedAt.startsWith(today)) return true;
+      if (t.createdAt && t.createdAt.startsWith(today)) return true;
+      return false;
+    });
 
     var score = 'F';
     var emoji = '😢';

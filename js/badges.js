@@ -71,7 +71,12 @@ const Badges = (() => {
     let stats = {
       totalCreated: tasks.length,
       totalDone: tasks.filter(function(t) { return t.done; }).length,
-      doneToday: tasks.filter(function(t) { return t.done && t.createdAt && t.createdAt.startsWith(today); }).length,
+      doneToday: tasks.filter(function(t) {
+        if (!t.done) return false;
+        if (t.completedAt && t.completedAt.startsWith(today)) return true;
+        if (t.createdAt && t.createdAt.startsWith(today)) return true;
+        return false;
+      }).length,
       streak: 0,
       level: 1,
       pomos: parseInt(localStorage.getItem('fceux_pomos_total') || '0'),

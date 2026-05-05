@@ -19,7 +19,12 @@ var PixelAI = (function() {
     var hour = now.getHours();
 
     var pending = tasks.filter(function(t) { return !t.done; });
-    var doneToday = tasks.filter(function(t) { return t.done && t.createdAt && t.createdAt.startsWith(today); });
+    var doneToday = tasks.filter(function(t) {
+      if (!t.done) return false;
+      if (t.completedAt && t.completedAt.startsWith(today)) return true;
+      if (t.createdAt && t.createdAt.startsWith(today)) return true;
+      return false;
+    });
     var todayDate = new Date(); todayDate.setHours(0,0,0,0);
 
     var overdue = pending.filter(function(t) {
