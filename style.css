@@ -69,7 +69,7 @@ body::after {
 .press-start { text-align: center; margin-top: 30px; font-size: 18px; color: var(--text-yellow); display: none; }
 
 /* 4. TITLE BAR */
-.app-wrapper { display: none; flex-direction: column; min-height: 100vh; }
+.app-wrapper { display: none; flex-direction: column; height: 100vh; overflow: hidden; }
 .app-wrapper.visible { display: flex; }
 .title-bar {
   background: linear-gradient(180deg, rgba(60,100,200,0.9) 0%, rgba(30,60,140,0.85) 50%, rgba(20,40,120,0.95) 100%);
@@ -143,7 +143,7 @@ body::after {
 .col-action { width: 36px; }
 
 /* 10. TASK LIST & ROWS */
-.task-list { flex: 1; overflow-y: auto; background: var(--bg-primary); min-height: 150px; }
+.task-list { flex: 1; overflow-y: auto; background: var(--bg-primary); min-height: 0; }
 .task-list::-webkit-scrollbar { width: 14px; }
 .task-list::-webkit-scrollbar-track { background: var(--bg-dark); }
 .task-list::-webkit-scrollbar-thumb { background: var(--border-light); border: 2px solid var(--bg-dark); }
