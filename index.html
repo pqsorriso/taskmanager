@@ -1064,8 +1064,8 @@
         <div class="config-section">
           <div class="config-section-title">📆 DIAS DE TRABALHO</div>
           <div class="config-row" style="flex-wrap:wrap;gap:4px;justify-content:flex-start" id="cfgWorkdays"></div>
-          <div class="config-row" style="gap:8px;align-items:center;flex-wrap:wrap">
-            <label style="font-size:11px">Entrada:</label>
+          <div class="config-row" style="gap:8px;align-items:center">
+            <label style="font-size:11px;min-width:55px">Entrada:</label>
             <div class="time-picker">
               <span class="tp-icon">⏰</span>
               <select id="cfgWorkStartHour">
@@ -1077,7 +1077,9 @@
                 <option value="00" selected>00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
               </select>
             </div>
-            <label style="font-size:11px">Saída:</label>
+          </div>
+          <div class="config-row" style="gap:8px;align-items:center">
+            <label style="font-size:11px;min-width:55px">Saída:</label>
             <div class="time-picker">
               <span class="tp-icon">⏰</span>
               <select id="cfgWorkEndHour">
