@@ -1,19 +1,23 @@
 /**
- * themes.js — Sistema de temas
+ * themes.js — Sistema de temas (8 temas)
  */
 const Themes = (() => {
   const STORAGE_KEY = 'fceux_theme';
   let currentTheme = 'dark';
 
   const themes = {
-    dark: { name: 'FCEUX Dark', class: '' },
-    matrix: { name: 'Matrix Green', class: 'theme-matrix' },
-    cyberpunk: { name: 'Cyberpunk', class: 'theme-cyberpunk' },
-    ocean: { name: 'Ocean Blue', class: 'theme-ocean' }
+    dark:      { name: '🌙 FCEUX Dark',    class: '' },
+    matrix:    { name: '💚 Matrix Green',   class: 'theme-matrix' },
+    cyberpunk: { name: '💜 Cyberpunk',      class: 'theme-cyberpunk' },
+    ocean:     { name: '🌊 Ocean Blue',     class: 'theme-ocean' },
+    dracula:   { name: '🧛 Dracula',        class: 'theme-dracula' },
+    nord:      { name: '❄️ Nord',           class: 'theme-nord' },
+    sunset:    { name: '🌅 Sunset',         class: 'theme-sunset' },
+    light:     { name: '☀️ Light Mode',     class: 'theme-light' }
   };
 
   function load() {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    var saved = localStorage.getItem(STORAGE_KEY);
     if (saved && themes[saved]) currentTheme = saved;
   }
 
@@ -21,11 +25,9 @@ const Themes = (() => {
 
   function apply(theme) {
     if (!themes[theme]) return;
-    // Remover todas as classes de tema
-    Object.values(themes).forEach(t => {
+    Object.values(themes).forEach(function(t) {
       if (t.class) document.body.classList.remove(t.class);
     });
-    // Aplicar novo tema
     currentTheme = theme;
     if (themes[theme].class) document.body.classList.add(themes[theme].class);
     save();
@@ -39,5 +41,5 @@ const Themes = (() => {
     apply(currentTheme);
   }
 
-  return { init, apply, getCurrent, getAll };
+  return { init: init, apply: apply, getCurrent: getCurrent, getAll: getAll };
 })();
