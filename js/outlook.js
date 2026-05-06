@@ -318,10 +318,149 @@ var Outlook = (function() {
     });
   }
 
+  // === EXPORTAR PDF ===
+  function exportPDF() {
+    var tasks = typeof TaskManager !== 'undefined' ? TaskManager.getAll() : [];
+    var today = new Date();
+    var todayStr = today.toISOString().slice(0, 10);
+    var pending = tasks.filter(function(t) { return !t.done; });
+    var done = tasks.filter(function(t) { return t.done; });
+
+    var win = window.open('', '_blank');
+    if (!win) {
+      if (typeof Notifications !== 'undefined') {
+        Notifications.showToast('❌ PDF', 'Permita popups para gerar o PDF!', 'danger', 5000);
+      }
+      return;
+    }
+
+    var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">';
+    html += '<title>FCEUX Task Manager — Relatório</title>';
+    html += '<style>';
+    html += 'body{font-family:Segoe UI,sans-serif;padding:30px;color:#333;max-width:800px;margin:0 auto}';
+    html += 'h1{color:#1a3a5c;border-bottom:3px solid #1a3a5c;padding-bottom:8px;font-size:22px}';
+    html += 'h2{color:#2a5a8c;margin-top:24px;font-size:16px;border-bottom:1px solid #ddd;padding-bottom:4px}';
+    html += '.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}';
+    html += '.header .date{color:#666;font-size:13px}';
+    html += '.stats{display:flex;gap:16px;margin:16px 0}';
+    html += '.stat-box{background:#f0f4f8;border:1px solid #d0d8e0;border-radius:6px;padding:12px 20px;text-align:center;flex:1}';
+    html += '.stat-box .val{font-size:28px;font-weight:bold;color:#1a3a5c}';
+    html += '.stat-box .lbl{font-size:11px;color:#666;margin-top:4px}';
+    html += 'table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}';
+    html += 'th{background:#1a3a5c;color:#fff;padding:8px 10px;text-align:left;font-size:11px}';
+    html += 'td{padding:6px 10px;border-bottom:1px solid #e0e0e0}';
+    html += 'tr:nth-child(even) td{background:#f8f8f8}';
+    html += '.pri-alta{color:#cc0000;font-weight:bold}';
+    html += '.pri-media{color:#cc8800}';
+    html += '.pri-baixa{color:#008844}';
+    html += '.done{color:#999;text-decoration:line-through}';
+    html += '.overdue{color:#cc0000;font-size:10px}';
+    html += '.footer{margin-top:30px;padding-top:10px;border-top:1px solid #ddd;font-size:10px;color:#999;text-align:center}';
+    html += '@media print{body{padding:15px}.stat-box{break-inside:avoid}}';
+    html += '</style></head><body>';
+
+    // Header
+    html += '<div class="header">';
+    html += '<h1>📋 FCEUX Task Manager</h1>';
+    html += '<div class="date">Gerado em: ' + formatDateBR(todayStr) + ' às ' + String(today.getHours()).padStart(2,'0') + ':' + String(today.getMinutes()).padStart(2,'0') + '</div>';
+    html += '</div>';
+
+    // Stats
+    var pct = tasks.length > 0 ? Math.round((done.length / tasks.length) * 100) : 0;
+    html += '<div class="stats">';
+    html += '<div class="stat-box"><div class="val">' + tasks.length + '</div><div class="lbl">TOTAL</div></div>';
+    html += '<div class="stat-box"><div class="val">' + done.length + '</div><div class="lbl">CONCLUÍDAS</div></div>';
+    html += '<div class="stat-box"><div class="val">' + pending.length + '</div><div class="lbl">PENDENTES</div></div>';
+    html += '<div class="stat-box"><div class="val">' + pct + '%</div><div class="lbl">PROGRESSO</div></div>';
+    html += '</div>';
+
+    // Pendentes
+    if (pending.length > 0) {
+      html += '<h2>📌 Tarefas Pendentes (' + pending.length + ')</h2>';
+      html += '<table><tr><th>Tarefa</th><th>Prioridade</th><th>Vencimento</th><th>Categoria</th></tr>';
+      pending.forEach(function(t) {
+        var priClass = 'pri-' + (t.priority || 'media');
+        var overdue = '';
+        if (t.dueDate) {
+          var due = new Date(t.dueDate + 'T00:00:00');
+          var todayD = new Date(); todayD.setHours(0,0,0,0);
+          if (due < todayD) overdue = ' <span class="overdue">⚠️ ATRASADA</span>';
+        }
+        html += '<tr>';
+        html += '<td>' + escHtml(t.text) + overdue + '</td>';
+        html += '<td class="' + priClass + '">' + (t.priority || 'media').toUpperCase() + '</td>';
+        html += '<td>' + (t.dueDate ? formatDateBR(t.dueDate) + (t.dueTime ? ' ' + t.dueTime : '') : '—') + '</td>';
+        html += '<td>' + (t.category || '—') + '</td>';
+        html += '</tr>';
+      });
+      html += '</table>';
+    }
+
+    // Concluídas recentes (últimos 7 dias)
+    var recentDone = done.filter(function(t) {
+      var d = new Date(today); d.setDate(d.getDate() - 7);
+      var ts = t.completedAt || t.createdAt || '';
+      return ts >= d.toISOString();
+    });
+
+    if (recentDone.length > 0) {
+      html += '<h2>✅ Concluídas (últimos 7 dias: ' + recentDone.length + ')</h2>';
+      html += '<table><tr><th>Tarefa</th><th>Prioridade</th><th>Concluída em</th></tr>';
+      recentDone.forEach(function(t) {
+        var ts = t.completedAt || t.createdAt || '';
+        html += '<tr class="done">';
+        html += '<td>' + escHtml(t.text) + '</td>';
+        html += '<td>' + (t.priority || 'media').toUpperCase() + '</td>';
+        html += '<td>' + (ts ? formatDateBR(ts.substring(0, 10)) : '—') + '</td>';
+        html += '</tr>';
+      });
+      html += '</table>';
+    }
+
+    // Gamification
+    if (typeof Gamification !== 'undefined') {
+      var info = Gamification.getLevelInfo();
+      html += '<h2>🎮 Gamificação</h2>';
+      html += '<div class="stats">';
+      html += '<div class="stat-box"><div class="val">⭐ Nv.' + info.level + '</div><div class="lbl">' + info.name + '</div></div>';
+      html += '<div class="stat-box"><div class="val">' + info.xp + '</div><div class="lbl">XP TOTAL</div></div>';
+      html += '<div class="stat-box"><div class="val">🔥 ' + info.streak + '</div><div class="lbl">STREAK</div></div>';
+      html += '</div>';
+    }
+
+    html += '<div class="footer">FCEUX Task Manager v2.6.6 — by Gustavo Nogueira — pqsorriso.github.io/TaskManager</div>';
+    html += '</body></html>';
+
+    win.document.write(html);
+    win.document.close();
+
+    setTimeout(function() {
+      win.print();
+    }, 500);
+
+    if (typeof Sounds !== 'undefined') Sounds.complete();
+    if (typeof Notifications !== 'undefined') {
+      Notifications.showToast('📄 PDF', 'Relatório gerado! Use Ctrl+P para salvar como PDF.', 'success', 5000);
+    }
+  }
+
+  function escHtml(s) {
+    if (!s) return '';
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  var btnExportPDF = document.getElementById('btnExportPDF');
+  if (btnExportPDF) {
+    btnExportPDF.addEventListener('click', exportPDF);
+  }
+
   return {
     exportICS: exportICS,
     sendEmail: sendEmail,
     exportDayICS: exportDayICS,
-    emailDaySummary: emailDaySummary
+    emailDaySummary: emailDaySummary,
+    exportPDF: exportPDF
   };
 })();

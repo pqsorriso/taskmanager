@@ -657,7 +657,12 @@ const TaskUI = (() => {
       const d = new Date(today2);
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().slice(0, 10);
-      const count = tasks.filter(t => t.done && t.createdAt && t.createdAt.startsWith(dateStr)).length;
+      const count = tasks.filter(function(t) {
+        if (!t.done) return false;
+        if (t.completedAt && t.completedAt.startsWith(dateStr)) return true;
+        if (t.createdAt && t.createdAt.startsWith(dateStr)) return true;
+        return false;
+      }).length;
       dayCounts.push({ day: dayNamesShort[d.getDay()], count: count });
       if (count > maxDay) maxDay = count;
     }
@@ -672,6 +677,55 @@ const TaskUI = (() => {
     });
 
     html += '</div>';
+
+    // Gráfico de progresso circular
+    html += '<div class="stats-section-title">PROGRESSO GERAL</div>';
+    html += '<div style="display:flex;justify-content:center;margin:12px 0">';
+    html += '<svg width="120" height="120" viewBox="0 0 120 120">';
+    var radius = 50;
+    var circumference = 2 * Math.PI * radius;
+    var offset = circumference - (pct / 100) * circumference;
+    html += '<circle cx="60" cy="60" r="' + radius + '" fill="none" stroke="rgba(0,100,200,0.2)" stroke-width="10"/>';
+    html += '<circle cx="60" cy="60" r="' + radius + '" fill="none" stroke="var(--text-cyan)" stroke-width="10" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + offset + '" transform="rotate(-90 60 60)" stroke-linecap="round"/>';
+    html += '<text x="60" y="55" text-anchor="middle" fill="var(--text-cyan)" font-size="22" font-family="var(--font-main)">' + pct + '%</text>';
+    html += '<text x="60" y="72" text-anchor="middle" fill="#006688" font-size="10" font-family="var(--font-main)">completo</text>';
+    html += '</svg>';
+    html += '</div>';
+
+    // Produtividade por hora do dia
+    html += '<div class="stats-section-title">PRODUTIVIDADE POR HORA</div>';
+    html += '<div class="chart-bars">';
+    var hourCounts = {};
+    tasks.forEach(function(t) {
+      if (!t.done) return;
+      var ts = t.completedAt || t.createdAt;
+      if (!ts) return;
+      var h = parseInt(ts.substring(11, 13));
+      if (isNaN(h)) return;
+      hourCounts[h] = (hourCounts[h] || 0) + 1;
+    });
+    var maxHour = Math.max.apply(null, Object.values(hourCounts).concat([1]));
+    for (var hr = 6; hr <= 22; hr++) {
+      var hc = hourCounts[hr] || 0;
+      var hh = hc > 0 ? Math.max(8, Math.round((hc / maxHour) * 80)) : 2;
+      html += '<div class="chart-bar-col">' +
+        '<span class="chart-bar-val">' + (hc > 0 ? hc : '') + '</span>' +
+        '<div class="chart-bar" style="height:' + hh + 'px;' + (hc === maxHour && hc > 0 ? 'background:var(--pri-baixa)' : '') + '"></div>' +
+        '<span class="chart-bar-label">' + hr + 'h</span>' +
+        '</div>';
+    }
+    html += '</div>';
+
+    // Tempo médio por tarefa
+    var tasksWithTime = tasks.filter(function(t) { return t.done && t.timeSpent && t.timeSpent > 0; });
+    if (tasksWithTime.length > 0) {
+      var avgTime = Math.round(tasksWithTime.reduce(function(a, t) { return a + t.timeSpent; }, 0) / tasksWithTime.length / 60);
+      html += '<div class="stats-section-title">EFICIÊNCIA</div>';
+      html += '<div class="stats-grid">';
+      html += '<div class="stat-card"><div class="sc-val cyan">' + avgTime + ' min</div><div class="sc-lbl">Tempo médio/tarefa</div></div>';
+      html += '<div class="stat-card"><div class="sc-val green">' + tasksWithTime.length + '</div><div class="sc-lbl">Tarefas cronometradas</div></div>';
+      html += '</div>';
+    }
 
     // Gamification info
     if (typeof Gamification !== 'undefined') {

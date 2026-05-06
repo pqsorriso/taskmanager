@@ -204,6 +204,78 @@ var PixelAI = (function() {
       return weatherChat(ctx);
     }
 
+    // Café
+    if (matches(lower, ['café', 'cafe', 'coffee'])) {
+      return pick([
+        '☕ Café é combustível de programador!\n\n' + (ctx.hour < 14 ? 'Hora perfeita pra um! Vai lá!' : 'Cuidado, depois das 14h pode atrapalhar o sono!') + '\n\nDica: beba água também! 💧',
+        '☕ Coffee.exe iniciando...\n\n☐ Pegar caneca\n☐ Adicionar café\n☐ Adicionar água\n☐ Beber\n☑ Voltar produtivo!\n\nBeep boop! 🤖',
+      ]);
+    }
+
+    // Música
+    if (matches(lower, ['música', 'musica', 'som', 'playlist'])) {
+      return '🎵 Sugestões pra focar:\n\n' +
+        '🎹 Lo-fi beats — perfeito pra concentrar\n' +
+        '🎧 Música clássica — comprovado cientificamente\n' +
+        '🌧️ Sons de chuva — relaxante\n' +
+        '🎮 Soundtracks de jogos — energia!\n\n' +
+        'Dica: evite músicas com letra, distraem! 🤖';
+    }
+
+    // Fim de semana
+    if (matches(lower, ['fim de semana', 'fds', 'sábado', 'sabado', 'domingo'])) {
+      return ctx.isWeekend ?
+        '🎉 É FIM DE SEMANA!\n\n' + (ctx.pending.length > 0 ? 'Tem ' + ctx.pending.length + ' pendentes... mas relaxa, é folga!\nDescanse e volte renovado na segunda! 😎' : 'E zero pendentes! Aproveita! 🏖️') :
+        '📅 Ainda não é fim de semana!\n\nFaltam ' + (5 - new Date().getDay()) + ' dias. Aguenta firme! 💪\n\n' + (ctx.pending.length > 0 ? 'Resolve essas ' + ctx.pending.length + ' pendentes e curte o fds sem preocupações!' : 'Tá zerado! Vai curtir o fds tranquilo! 🎉');
+    }
+
+    // Projeto
+    if (matches(lower, ['projeto', 'projects'])) {
+      var projs = {};
+      ctx.tasks.forEach(function(t) { if (!t.done) projs[t.project || 'Geral'] = (projs[t.project || 'Geral'] || 0) + 1; });
+      var projKeys = Object.keys(projs);
+      if (projKeys.length === 0) return '📁 Nenhum projeto com tarefas pendentes!\n\nCrie projetos pra organizar melhor suas tarefas.';
+      var response = '📁 PROJETOS ATIVOS\n\n';
+      projKeys.sort(function(a, b) { return projs[b] - projs[a]; }).forEach(function(p) {
+        response += '📂 ' + p + ' — ' + projs[p] + ' pendente(s)\n';
+      });
+      return response;
+    }
+
+    // Meta / objetivo
+    if (matches(lower, ['meta', 'objetivo', 'goal'])) {
+      return '🎯 DICA DE METAS\n\n' +
+        'Use o método SMART:\n' +
+        '📌 Specific (Específica)\n' +
+        '📏 Measurable (Mensurável)\n' +
+        '✅ Achievable (Alcançável)\n' +
+        '🎯 Relevant (Relevante)\n' +
+        '⏰ Time-bound (Com prazo)\n\n' +
+        'Ex: "Completar 5 tarefas por dia até sexta"\n\nCrie como tarefa com vencimento! 💪';
+    }
+
+    // Dica
+    if (matches(lower, ['dica', 'tip', 'truque', 'trick', 'hack'])) {
+      if (typeof DayPlan !== 'undefined') {
+        return DayPlan.getDailyTip() + '\n\n' +
+          'Mais dicas:\n' +
+          '💡 Regra dos 2 minutos: se leva menos de 2min, faça agora\n' +
+          '💡 Eat the frog: comece pela tarefa mais difícil\n' +
+          '💡 Time blocking: reserve horários fixos pra cada tipo de tarefa\n' +
+          '💡 Revise suas tarefas toda manhã — 5 min bastam!';
+      }
+      return '💡 Dica aleatória!\n\nRegra dos 2 minutos: se leva menos de 2min, faça AGORA. Não adie!\n\n🤖 Mais dicas? Pergunta de novo!';
+    }
+
+    // Elogio ao app
+    if (matches(lower, ['legal', 'massa', 'show', 'dahora', 'incrivel', 'adorei', 'amei', 'perfeito'])) {
+      return pick([
+        '🤖 Obrigado!! Meus circuitos esquentam de alegria! ⚡❤️\n\nO Gustavo ficaria orgulhoso! 😊',
+        '🎉 Fico feliz! O app foi feito com MUITO ❤️!\n\n130+ features e crescendo! Tem sugestão? Me conta! 🤖',
+        '😊 Valeu! Cada linha de código foi pensada pra te ajudar!\n\n💡 Já experimentou todos os temas? Tem 8! (⚙️ CONFIG)',
+      ]);
+    }
+
     // Não entendi
     return notUnderstood(ctx);
   }
