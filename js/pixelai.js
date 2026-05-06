@@ -179,6 +179,12 @@ var PixelAI = (function() {
       return stats(ctx);
     }
 
+    // Padrões
+    if (matches(lower, ['padrão', 'padrao', 'padrões', 'padroes', 'pattern', 'hábito de trabalho', 'como eu trabalho', 'meu perfil', 'insights'])) {
+      if (typeof PixelPatterns !== 'undefined') return PixelPatterns.getInsights();
+      return 'Módulo de padrões não encontrado!';
+    }
+
     // Ajuda / funcionalidades
     if (matches(lower, ['ajuda', 'help', 'como usar', 'funcionalidade', 'feature', 'o que posso', 'comandos'])) {
       return helpInfo();
@@ -763,6 +769,16 @@ var PixelAI = (function() {
   function proactiveCheck() {
     var now = Date.now();
     if (now - lastProactive < 1800000) return; // 30 min mínimo entre proativas
+
+    // Sugestão baseada em padrões
+    if (typeof PixelPatterns !== 'undefined') {
+      var suggestion = PixelPatterns.getProactiveSuggestion();
+      if (suggestion && Math.random() > 0.4) {
+        lastProactive = now;
+        showProactiveBubble(suggestion);
+        return;
+      }
+    }
 
     var ctx = getContext();
 

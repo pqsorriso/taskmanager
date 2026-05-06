@@ -55,6 +55,7 @@ const ASSETS = [
   './js/weekly.js',
   './js/outlook.js',
   './js/sessioncomplete.js',
+  './js/pixelpatterns.js',
 ];
 
 // Install — cacheia tudo
