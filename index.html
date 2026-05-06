@@ -1064,6 +1064,32 @@
         <div class="config-section">
           <div class="config-section-title">📆 DIAS DE TRABALHO</div>
           <div class="config-row" style="flex-wrap:wrap;gap:4px;justify-content:flex-start" id="cfgWorkdays"></div>
+          <div class="config-row" style="gap:8px;align-items:center;flex-wrap:wrap">
+            <label style="font-size:11px">Entrada:</label>
+            <div class="time-picker">
+              <span class="tp-icon">⏰</span>
+              <select id="cfgWorkStartHour">
+                <option value="05">05</option><option value="06">06</option><option value="07" selected>07</option>
+                <option value="08">08</option><option value="09">09</option><option value="10">10</option>
+              </select>
+              <span class="tp-sep">:</span>
+              <select id="cfgWorkStartMin">
+                <option value="00" selected>00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
+              </select>
+            </div>
+            <label style="font-size:11px">Saída:</label>
+            <div class="time-picker">
+              <span class="tp-icon">⏰</span>
+              <select id="cfgWorkEndHour">
+                <option value="14">14</option><option value="15">15</option><option value="16">16</option>
+                <option value="17" selected>17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+              </select>
+              <span class="tp-sep">:</span>
+              <select id="cfgWorkEndMin">
+                <option value="00" selected>00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
+              </select>
+            </div>
+          </div>
           <div class="config-row"><label>Férias de:</label><input type="date" id="cfgVacStart" /></div>
           <div class="config-row"><label>Férias até:</label><input type="date" id="cfgVacEnd" /></div>
         </div>

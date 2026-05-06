@@ -59,6 +59,20 @@ const Config = (() => {
     document.getElementById('cfgVacStart').value = settings.vacStart;
     document.getElementById('cfgVacEnd').value = settings.vacEnd;
     renderWorkdays();
+    // Carregar horário de trabalho
+    try {
+      var workHours = JSON.parse(localStorage.getItem('fceux_workhours') || '{"start":"07:00","end":"17:00"}');
+      var startParts = workHours.start.split(':');
+      var endParts = workHours.end.split(':');
+      var wsh = document.getElementById('cfgWorkStartHour');
+      var wsm = document.getElementById('cfgWorkStartMin');
+      var weh = document.getElementById('cfgWorkEndHour');
+      var wem = document.getElementById('cfgWorkEndMin');
+      if (wsh) wsh.value = startParts[0];
+      if (wsm) wsm.value = startParts[1];
+      if (weh) weh.value = endParts[0];
+      if (wem) wem.value = endParts[1];
+    } catch(e) {}
     setToggle('cfgAutoScale', settings.autoScale);
     const cfgScaleMedia = document.getElementById('cfgScaleMedia');
     if (cfgScaleMedia) cfgScaleMedia.value = settings.scaleMedia;
@@ -146,6 +160,17 @@ const Config = (() => {
     if (typeof Workdays !== 'undefined') {
       localStorage.setItem('fceux_workdays', JSON.stringify(settings.workdays));
       localStorage.setItem('fceux_vacation', JSON.stringify({ start: settings.vacStart, end: settings.vacEnd }));
+
+      // Salvar horário de trabalho
+      var wsh = document.getElementById('cfgWorkStartHour');
+      var wsm = document.getElementById('cfgWorkStartMin');
+      var weh = document.getElementById('cfgWorkEndHour');
+      var wem = document.getElementById('cfgWorkEndMin');
+      var workHours = {
+        start: (wsh ? wsh.value : '07') + ':' + (wsm ? wsm.value : '00'),
+        end: (weh ? weh.value : '17') + ':' + (wem ? wem.value : '00')
+      };
+      localStorage.setItem('fceux_workhours', JSON.stringify(workHours));
     }
 
     // Aplicar tema
