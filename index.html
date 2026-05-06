@@ -838,6 +838,32 @@
       <div class="vacation-body">
         <p>Selecione os dias que você trabalha.</p>
         <div class="workdays-row" id="workdaysRow"></div>
+        <div style="margin:12px 0;display:flex;gap:10px;align-items:center">
+          <label style="color:#006688;font-size:12px">Entrada:</label>
+          <div class="time-picker">
+            <span class="tp-icon">⏰</span>
+            <select id="workStartHour">
+              <option value="05">05</option><option value="06">06</option><option value="07" selected>07</option>
+              <option value="08">08</option><option value="09">09</option><option value="10">10</option>
+            </select>
+            <span class="tp-sep">:</span>
+            <select id="workStartMin">
+              <option value="00" selected>00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
+            </select>
+          </div>
+          <label style="color:#006688;font-size:12px">Saída:</label>
+          <div class="time-picker">
+            <span class="tp-icon">⏰</span>
+            <select id="workEndHour">
+              <option value="14">14</option><option value="15">15</option><option value="16">16</option>
+              <option value="17" selected>17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+            </select>
+            <span class="tp-sep">:</span>
+            <select id="workEndMin">
+              <option value="00" selected>00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
+            </select>
+          </div>
+        </div>
         <label>Folga de:</label>
         <input type="date" id="vacationStart" />
         <label>Até:</label>

@@ -118,7 +118,12 @@ var DayPlan = (function() {
     var today = getTodayStr();
     var shown = localStorage.getItem(SUMMARY_KEY);
 
-    if (h >= 18 && shown !== today) {
+    var endHour = 18;
+    if (typeof Workdays !== 'undefined') {
+      var wh = Workdays.getWorkHours();
+      if (wh && wh.end) endHour = parseInt(wh.end.split(':')[0]) || 18;
+    }
+    if (h >= endHour && shown !== today) {
       showDaySummary();
       localStorage.setItem(SUMMARY_KEY, today);
     }

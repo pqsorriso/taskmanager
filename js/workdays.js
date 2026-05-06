@@ -10,6 +10,8 @@ const Workdays = (() => {
   // Padrão: Seg a Sex
   let workdays = [1, 2, 3, 4, 5]; // 0=Dom, 1=Seg, ..., 6=Sab
   let vacation = { start: '', end: '' };
+  let workHours = { start: '07:00', end: '17:00' };
+  const HOURS_KEY = 'fceux_workhours';
 
   const dayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
   const overlay = document.getElementById('vacationOverlay');
@@ -20,12 +22,15 @@ const Workdays = (() => {
       if (saved) workdays = JSON.parse(saved);
       const vac = localStorage.getItem(VACATION_KEY);
       if (vac) vacation = JSON.parse(vac);
+      const hours = localStorage.getItem(HOURS_KEY);
+      if (hours) workHours = JSON.parse(hours);
     } catch (e) {}
   }
 
   function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(workdays));
     localStorage.setItem(VACATION_KEY, JSON.stringify(vacation));
+    localStorage.setItem(HOURS_KEY, JSON.stringify(workHours));
   }
 
   function isWorkday(date) {
@@ -66,6 +71,17 @@ const Workdays = (() => {
     renderDayToggles();
     document.getElementById('vacationStart').value = vacation.start || '';
     document.getElementById('vacationEnd').value = vacation.end || '';
+    // Horário de trabalho
+    var startParts = (workHours.start || '07:00').split(':');
+    var endParts = (workHours.end || '17:00').split(':');
+    var wsh = document.getElementById('workStartHour');
+    var wsm = document.getElementById('workStartMin');
+    var weh = document.getElementById('workEndHour');
+    var wem = document.getElementById('workEndMin');
+    if (wsh) wsh.value = startParts[0];
+    if (wsm) wsm.value = startParts[1];
+    if (weh) weh.value = endParts[0];
+    if (wem) wem.value = endParts[1];
     overlay.classList.add('visible');
   }
 
@@ -96,6 +112,13 @@ const Workdays = (() => {
   function saveConfig() {
     vacation.start = document.getElementById('vacationStart').value;
     vacation.end = document.getElementById('vacationEnd').value;
+    // Salvar horário de trabalho
+    var wsh = document.getElementById('workStartHour');
+    var wsm = document.getElementById('workStartMin');
+    var weh = document.getElementById('workEndHour');
+    var wem = document.getElementById('workEndMin');
+    if (wsh && wsm) workHours.start = wsh.value + ':' + wsm.value;
+    if (weh && wem) workHours.end = weh.value + ':' + wem.value;
     save();
     close();
 
@@ -137,6 +160,7 @@ const Workdays = (() => {
     isTodayWorkday: isTodayWorkday,
     getWorkdays: getWorkdays,
     getVacation: getVacation,
+    getWorkHours: function() { return workHours; },
     open: open
   };
 })();
