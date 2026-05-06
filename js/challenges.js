@@ -81,13 +81,13 @@ const Challenges = (() => {
 
     switch (challenge.check) {
       case 'doneToday':
-        return tasks.filter(t => t.done && t.createdAt && t.createdAt.startsWith(today)).length;
+        return tasks.filter(function(t) { return t.done && ((t.completedAt && t.completedAt.startsWith(today)) || (t.createdAt && t.createdAt.startsWith(today))); }).length;
 
       case 'altaToday':
-        return tasks.filter(t => t.done && t.priority === 'alta' && t.createdAt && t.createdAt.startsWith(today)).length;
+        return tasks.filter(function(t) { return t.done && t.priority === 'alta' && ((t.completedAt && t.completedAt.startsWith(today)) || (t.createdAt && t.createdAt.startsWith(today))); }).length;
 
       case 'createdToday':
-        return tasks.filter(t => t.createdAt && t.createdAt.startsWith(today)).length;
+        return tasks.filter(function(t) { return t.createdAt && t.createdAt.startsWith(today); }).length;
 
       case 'pomosToday':
         return parseInt(localStorage.getItem('fceux_pomos_' + today) || '0');
@@ -113,11 +113,13 @@ const Challenges = (() => {
       case 'doneMorning':
         if (now.getHours() >= 12) {
           return tasks.filter(t => {
-            if (!t.done || !t.createdAt || !t.createdAt.startsWith(today)) return false;
+            if (!t.done) return false;
+            var doneToday = (t.completedAt && t.completedAt.startsWith(today)) || (t.createdAt && t.createdAt.startsWith(today));
+            if (!doneToday) return false;
             return true;
           }).length;
         }
-        return tasks.filter(t => t.done && t.createdAt && t.createdAt.startsWith(today)).length;
+        return tasks.filter(function(t) { return t.done && ((t.completedAt && t.completedAt.startsWith(today)) || (t.createdAt && t.createdAt.startsWith(today))); }).length;
 
       case 'streak':
         if (typeof Gamification !== 'undefined') return Gamification.getLevelInfo().streak;
@@ -126,7 +128,7 @@ const Challenges = (() => {
       case 'focusMinutes':
         let totalMin = 0;
         tasks.forEach(t => {
-          if (t.timeSpent && t.createdAt && t.createdAt.startsWith(today)) {
+          if (t.timeSpent && ((t.completedAt && t.completedAt.startsWith(today)) || (t.createdAt && t.createdAt.startsWith(today)))) {
             totalMin += Math.floor(t.timeSpent / 60);
           }
         });
