@@ -100,28 +100,42 @@
 
     <!-- Toolbar -->
     <div class="toolbar">
-      <button class="toolbar-btn" id="btnExport" title="Exportar JSON">📤 EXPORT</button>
-      <button class="toolbar-btn" id="btnImport" title="Importar JSON">📥 IMPORT</button>
-      <input type="file" id="importInput" accept=".json" style="display:none" />
-      <button class="toolbar-btn" id="btnClearDone" title="Limpar Concluídas">🗑 CLEAR DONE</button>
+      <button class="toolbar-btn" id="btnPomo" title="Pomodoro Timer">🍅 POMO</button>
+      <button class="toolbar-btn" id="btnFocus" title="Modo Foco">🎯 FOCO</button>
+      <button class="toolbar-btn" id="btnHabits" title="Habit Tracker">🎯 HABITS</button>
+      <button class="toolbar-btn" id="btnCountdown" title="Countdown">⏳ COUNT</button>
       <div class="toolbar-sep"></div>
       <button class="toolbar-btn" id="btnStats" title="Estatísticas">📊 STATS</button>
-      <button class="toolbar-btn" id="btnHistory" title="Histórico">📜 HISTORY</button>
-      <button class="toolbar-btn" id="btnPomo" title="Pomodoro Timer">🍅 POMO</button>
-      <button class="toolbar-btn" id="btnNotepad" title="Bloco de Notas">📝 NOTES</button>
-      <button class="toolbar-btn" id="btnTemplates" title="Templates">📄 TEMPLATES</button>
-      <button class="toolbar-btn" id="btnHabits" title="Habit Tracker">🎯 HABITS</button>
-      <button class="toolbar-btn" id="btnArchive" title="Arquivo e Lixeira">📦 ARQUIVO</button>
-      <button class="toolbar-btn" id="btnConfig" title="Configurações">⚙️ CONFIG</button>
-      <button class="toolbar-btn" id="btnEisenhower" title="Matriz de Eisenhower">🎯 MATRIX</button>
-      <button class="toolbar-btn" id="btnCountdown" title="Countdown">⏳ COUNTDOWN</button>
-      <button class="toolbar-btn" id="btnBadges" title="Conquistas">🏆 BADGES</button>
       <button class="toolbar-btn" id="btnWeekly" title="Relatório Semanal">📊 REPORT</button>
-      <button class="toolbar-btn" id="btnOutlookDay" title="Exportar dia pro Outlook">📅 OUTLOOK</button>
-      <button class="toolbar-btn" id="btnExportPDF" title="Exportar Relatório PDF">📄 PDF</button>
+      <button class="toolbar-btn" id="btnBadges" title="Conquistas">🏆 BADGES</button>
+      <div class="toolbar-sep"></div>
+      <div class="toolbar-group">
+        <button class="toolbar-group-btn" id="tbMenuData">💾 Dados ▾</button>
+        <div class="toolbar-dropdown" id="tbDropData">
+          <button class="toolbar-dropdown-item" id="btnExport">📤 Exportar JSON</button>
+          <button class="toolbar-dropdown-item" id="btnImport">📥 Importar JSON</button>
+          <div class="toolbar-dropdown-sep"></div>
+          <button class="toolbar-dropdown-item" id="btnExportPDF">📄 Exportar PDF</button>
+          <button class="toolbar-dropdown-item" id="btnOutlookDay">📅 Outlook</button>
+          <button class="toolbar-dropdown-item" id="btnPrint">🖨️ Imprimir</button>
+          <div class="toolbar-dropdown-sep"></div>
+          <button class="toolbar-dropdown-item" id="btnClearDone">🗑 Limpar Concluídas</button>
+        </div>
+      </div>
+      <div class="toolbar-group">
+        <button class="toolbar-group-btn" id="tbMenuTools">🔧 Mais ▾</button>
+        <div class="toolbar-dropdown" id="tbDropTools">
+          <button class="toolbar-dropdown-item" id="btnNotepad">📝 Bloco de Notas</button>
+          <button class="toolbar-dropdown-item" id="btnTemplates">📄 Templates</button>
+          <button class="toolbar-dropdown-item" id="btnEisenhower">🎯 Matriz Eisenhower</button>
+          <button class="toolbar-dropdown-item" id="btnHistory">📜 Histórico</button>
+          <button class="toolbar-dropdown-item" id="btnArchive">📦 Arquivo & Lixeira</button>
+        </div>
+      </div>
+      <div class="toolbar-sep"></div>
+      <button class="toolbar-btn" id="btnConfig" title="Configurações">⚙️ CONFIG</button>
       <button class="toolbar-btn" id="btnAbout" title="Sobre">ℹ️ ABOUT</button>
-      <button class="toolbar-btn" id="btnPrint" title="Imprimir lista">🖨️ PRINT</button>
-      <button class="toolbar-btn" id="btnFocus" title="Modo Foco">🎯 FOCO</button>
+    </div>
       <div class="toolbar-sep"></div>
       <div class="view-toggle">
         <button class="view-btn active" data-view="list" title="Lista">☰</button>
@@ -1585,6 +1599,40 @@
   <script src="js/sessioncomplete.js"></script>
   <script src="js/boot.js"></script>
   <script src="js/app.js"></script>
+  
+  <script>
+  // Toolbar dropdown menus
+  (function() {
+    function setupDropdown(btnId, dropId) {
+      var btn = document.getElementById(btnId);
+      var drop = document.getElementById(dropId);
+      if (!btn || !drop) return;
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        document.querySelectorAll('.toolbar-dropdown.visible').forEach(function(d) {
+          if (d !== drop) d.classList.remove('visible');
+        });
+        drop.classList.toggle('visible');
+      });
+
+      drop.querySelectorAll('.toolbar-dropdown-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          drop.classList.remove('visible');
+        });
+      });
+    }
+
+    setupDropdown('tbMenuData', 'tbDropData');
+    setupDropdown('tbMenuTools', 'tbDropTools');
+
+    document.addEventListener('click', function() {
+      document.querySelectorAll('.toolbar-dropdown.visible').forEach(function(d) {
+        d.classList.remove('visible');
+      });
+    });
+  })();
+  </script>
 
 </body>
 </html>
