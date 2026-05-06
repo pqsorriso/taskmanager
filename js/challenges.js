@@ -241,7 +241,7 @@ const Challenges = (() => {
     // Salvar no histórico
     try {
       var history = JSON.parse(localStorage.getItem('fceux_challenge_history') || '[]');
-      history.push({ id: challenge.id, date: today });
+      history.push({ id: next.id, date: today });
       localStorage.setItem('fceux_challenge_history', JSON.stringify(history));
     } catch(e) {}
 
