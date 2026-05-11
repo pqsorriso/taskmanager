@@ -49,6 +49,11 @@
     PixelAI.init();
     DayPlan.init();
     PixelPatterns.init();
+
+    // Auto-refresh a cada 60s pra atualizar overdue por horário
+    setInterval(function() {
+      TaskManager.render();
+    }, 60000);
   });
 
   // Som de startup após boot

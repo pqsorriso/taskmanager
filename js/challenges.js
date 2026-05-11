@@ -216,7 +216,7 @@ const Challenges = (() => {
     } catch(e) {}
 
     // Pegar próximo desafio que não foi usado hoje
-    var available = challenges.filter(function(c) { return usedIds.indexOf(c.id) === -1; });
+    var available = templates.filter(function(c) { return usedIds.indexOf(c.id) === -1; });
 
     if (available.length === 0) {
       // Todos os desafios do dia foram completados!
