@@ -732,8 +732,26 @@ const TaskManager = (() => {
     t.done = !t.done;
     if (t.done) {
       t.completedAt = new Date().toISOString();
+      // Verificar se foi concluída em atraso
+      if (t.dueDate) {
+        var now = new Date();
+        var todayStr = now.toISOString().slice(0, 10);
+        var wasLate = false;
+        if (t.dueDate < todayStr) {
+          wasLate = true;
+        } else if (t.dueDate === todayStr && t.dueTime) {
+          var parts = t.dueTime.split(':');
+          var dueDateTime = new Date();
+          dueDateTime.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+          if (now > dueDateTime) wasLate = true;
+        }
+        t.completedLate = wasLate;
+      } else {
+        t.completedLate = false;
+      }
     } else {
       t.completedAt = '';
+      t.completedLate = false;
     }
     await TaskDB.update(t);
 
