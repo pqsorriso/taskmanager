@@ -187,8 +187,112 @@ const Pet = (() => {
     load();
     checkUnlock();
     redraw();
-    // Verificar evolução a cada 30 segundos
     setInterval(checkUnlock, 30000);
+
+    // Interação com clique no pet
+    var petCanvas = document.getElementById('petCanvas');
+    if (petCanvas) {
+      var petClickCount = 0;
+      var petClickTimer = null;
+
+      petCanvas.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (!petData.unlocked) return;
+
+        petClickCount++;
+        if (petClickTimer) clearTimeout(petClickTimer);
+        petClickTimer = setTimeout(function() { petClickCount = 0; }, 2000);
+
+        // Animação de pulo
+        var container = petCanvas.parentElement;
+        if (container) {
+          container.style.transform = 'translateY(-8px)';
+          setTimeout(function() { container.style.transform = ''; }, 200);
+        }
+
+        // Sons
+        if (typeof Sounds !== 'undefined') Sounds.click();
+
+        // Frases do pet
+        var petName = petData.type === 'cat' ? '🐱 BYTE' : petData.type === 'dog' ? '🐕 BYTE' : '🐉 BYTE';
+        var phrases = [];
+
+        if (petData.type === 'cat') {
+          phrases = [
+            'Miau! 😺', 'Purr... 😸', 'Miau miau! 🐱', '*ronrona* 😻',
+            '*esfrega na perna* 🐈', 'Prr prr... quer carinho? 😺',
+            '*olha com curiosidade* 👀', 'Miau? Tarefa? 📋',
+            '*boceja* 😴', '*brinca com o cursor* 🖱️'
+          ];
+        } else if (petData.type === 'dog') {
+          phrases = [
+            'Au au! 🐕', 'Woof! 🐶', '*abana o rabo* 🐕', '*late feliz* 🎉',
+            '*traz a bolinha* ⚽', 'Au! Bora trabalhar! 💪',
+            '*pula de alegria* 🐾', '*deita e rola* 😊',
+            '*lambe a tela* 👅', 'Woof woof! Cadê a tarefa? 📋'
+          ];
+        } else {
+          phrases = [
+            '*sopra fogo* 🔥', 'ROAR! 🐉', '*bate as asas* 🪽',
+            '*olha imponente* 👑', '*voa ao redor da tela* ✨',
+            'Dragão protege suas tarefas! 🛡️', '*solta faíscas* ⚡',
+            '*ronrona como trovão* ⛈️', 'LEGENDARY! 🏆',
+            '*aquece seu café com fogo* ☕🔥'
+          ];
+        }
+
+        var phrase = phrases[Math.floor(Math.random() * phrases.length)];
+
+        // Mostrar frase no bubble do mascote
+        var bubble = document.getElementById('mascotBubble');
+        if (bubble) {
+          bubble.textContent = petName + ': ' + phrase;
+          bubble.classList.add('visible');
+          setTimeout(function() { bubble.classList.remove('visible'); }, 3000);
+        }
+
+        // 5 cliques = pet faz truque
+        if (petClickCount >= 5) {
+          petClickCount = 0;
+          doTrick();
+        }
+      });
+    }
+  }
+
+  // === TRUQUES DO PET ===
+  function doTrick() {
+    var tricks = [];
+
+    if (petData.type === 'cat') {
+      tricks = ['*dá uma cambalhota* 🤸', '*caça um rato imaginário* 🐭', '*pula no teclado* ⌨️ adsfjkl;'];
+    } else if (petData.type === 'dog') {
+      tricks = ['*dá a pata* 🐾', '*faz morto* 😵', '*pega o graveto* 🪵 Bom garoto!'];
+    } else {
+      tricks = ['*voa em círculos* 🌀', '*cospe fogos de artifício* 🎆', '*faz um loop no ar* 🔄 INSANO!'];
+    }
+
+    var trick = tricks[Math.floor(Math.random() * tricks.length)];
+
+    if (typeof Notifications !== 'undefined') {
+      var name = petData.type === 'cat' ? '🐱' : petData.type === 'dog' ? '🐕' : '🐉';
+      Notifications.showToast(name + ' TRUQUE!', trick, 'success', 4000);
+    }
+
+    // Emote
+    var container = document.getElementById('mascotContainer');
+    if (container) {
+      var emote = document.createElement('div');
+      emote.className = 'mascot-emote';
+      emote.textContent = petData.type === 'cat' ? '😺' : petData.type === 'dog' ? '🐕' : '🐉';
+      container.appendChild(emote);
+      setTimeout(function() { emote.remove(); }, 1500);
+    }
+
+    // XP bônus
+    if (typeof Gamification !== 'undefined') {
+      Gamification.addBonusXP(5, 'Truque do pet!');
+    }
   }
 
   return { init, redraw, onTaskCompleted, checkUnlock };
