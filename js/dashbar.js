@@ -73,7 +73,15 @@ const DashBar = (() => {
     now.setHours(0, 0, 0, 0);
     const overdue = tasks.filter(t => {
       if (t.done || !t.dueDate) return false;
-      return new Date(t.dueDate + 'T00:00:00') < now;
+      var todayStr = now.toISOString().slice(0, 10);
+      if (t.dueDate < todayStr) return true;
+      if (t.dueDate === todayStr && t.dueTime) {
+        var parts = t.dueTime.split(':');
+        var dueDateTime = new Date();
+        dueDateTime.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+        if (new Date() > dueDateTime) return true;
+      }
+      return false;
     }).length;
 
     // Tempo focado hoje

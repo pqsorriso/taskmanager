@@ -608,7 +608,13 @@ const TaskUI = (() => {
     const overdue = tasks.filter(t => {
       if (t.done || !t.dueDate) return false;
       const today = new Date(); today.setHours(0, 0, 0, 0);
-      return new Date(t.dueDate + 'T00:00:00') < today;
+      var todayStr = new Date().toISOString().slice(0, 10);
+      if (t.dueDate < todayStr) return true;
+      if (t.dueDate === todayStr && t.dueTime) {
+        var p = t.dueTime.split(':'); var d = new Date(); d.setHours(parseInt(p[0]), parseInt(p[1]), 0, 0);
+        if (new Date() > d) return true;
+      }
+      return false;
     }).length;
 
     const alta = tasks.filter(t => !t.done && t.priority === 'alta').length;

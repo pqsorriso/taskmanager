@@ -28,7 +28,13 @@ var PixelAI = (function() {
     var todayDate = new Date(); todayDate.setHours(0,0,0,0);
 
     var overdue = pending.filter(function(t) {
-      return t.dueDate && new Date(t.dueDate + 'T00:00:00') < todayDate;
+      if (!t.dueDate) return false;
+      if (new Date(t.dueDate + 'T00:00:00') < todayDate) return true;
+      if (t.dueDate === today && t.dueTime) {
+        var p = t.dueTime.split(':'); var d = new Date(); d.setHours(parseInt(p[0]), parseInt(p[1]), 0, 0);
+        if (new Date() > d) return true;
+      }
+      return false;
     });
 
     var dueToday = pending.filter(function(t) { return t.dueDate === today; });

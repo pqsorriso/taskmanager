@@ -377,7 +377,15 @@ const Mascot = (() => {
     }
 
     // Tarefas atrasadas
-    const overdue = tasks.filter(t => !t.done && t.dueDate && t.dueDate < todayStr);
+    const overdue = tasks.filter(function(t) {
+      if (t.done || !t.dueDate) return false;
+      if (t.dueDate < todayStr) return true;
+      if (t.dueDate === todayStr && t.dueTime) {
+        var p = t.dueTime.split(':'); var d = new Date(); d.setHours(parseInt(p[0]), parseInt(p[1]), 0, 0);
+        if (new Date() > d) return true;
+      }
+      return false;
+    });
     if (overdue.length > 0) {
       showBubble('🚨 ' + overdue.length + ' tarefa(s) atrasada(s)!');
       return true;
@@ -422,7 +430,16 @@ const Mascot = (() => {
     const tasks = TaskManager.getAll();
     const pending = tasks.filter(t => !t.done);
     const today = new Date(); today.setHours(0, 0, 0, 0);
-    const overdue = pending.filter(t => t.dueDate && new Date(t.dueDate + 'T00:00:00') < today).length;
+    const overdue = pending.filter(function(t) {
+      if (!t.dueDate) return false;
+      var todayStr = new Date().toISOString().slice(0, 10);
+      if (t.dueDate < todayStr) return true;
+      if (t.dueDate === todayStr && t.dueTime) {
+        var p = t.dueTime.split(':'); var d = new Date(); d.setHours(parseInt(p[0]), parseInt(p[1]), 0, 0);
+        if (new Date() > d) return true;
+      }
+      return false;
+    }).length;
 
     // Pomodoro/Foco ativo
     if (document.title.includes('🍅') || document.title.includes('🎯')) {
