@@ -760,8 +760,32 @@ const TaskManager = (() => {
       Gamification.taskCompleted(t.priority);
     }
 
-    // Confetti celebration
-    if (t.done) showConfetti();
+    // Animação + confetti
+    if (t.done) {
+      showConfetti();
+      // Animação na row
+      var row = document.querySelector('.task-row[data-id="' + id + '"]') || document.querySelector('.task-check[data-id="' + id + '"]');
+      if (row) {
+        var taskRow = row.closest('.task-row');
+        if (taskRow) {
+          taskRow.classList.add('completing');
+          // Sparkles
+          var sparkles = ['✨', '⭐', '💪', '✅', '🎉'];
+          for (var s = 0; s < 3; s++) {
+            var spark = document.createElement('div');
+            spark.className = 'task-complete-sparkle';
+            spark.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+            spark.style.left = (Math.random() * 80 + 10) + '%';
+            spark.style.top = '0';
+            spark.style.animationDelay = (s * 0.15) + 's';
+            taskRow.style.position = 'relative';
+            taskRow.appendChild(spark);
+            setTimeout(function() { spark.remove(); }, 1200);
+          }
+          setTimeout(function() { taskRow.classList.remove('completing'); }, 700);
+        }
+      }
+    }
     if (t.done && typeof Sounds !== 'undefined') Sounds.complete();
 
     // Mascote reage

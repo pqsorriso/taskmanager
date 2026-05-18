@@ -815,7 +815,55 @@ var PixelAI = (function() {
     // Parabéns
     if (ctx.doneToday.length >= 5 && Math.random() > 0.7) {
       lastProactive = now;
-      showProactiveBubble('🔥 ' + ctx.doneToday.length + ' tarefas hoje! Tá ON FIRE!');
+      var fireMessages = [
+        '🔥 ' + ctx.doneToday.length + ' tarefas hoje! Tá ON FIRE!',
+        '🏆 ' + ctx.doneToday.length + ' feitas! Você é uma MÁQUINA!',
+        '⚡ ' + ctx.doneToday.length + '?! Tá jogando no modo FÁCIL?!',
+        '🚀 ' + ctx.doneToday.length + ' tarefas! Elon Musk que se cuide!',
+      ];
+      showProactiveBubble(fireMessages[Math.floor(Math.random() * fireMessages.length)]);
+      return;
+    }
+
+    // Humor aleatório
+    if (Math.random() > 0.85) {
+      lastProactive = now;
+      var humorMessages = [
+        '🤖 *bip bop* Tô aqui se precisar! Não sou ChatGPT mas tento! 😅',
+        '☕ Café já esfriou? Hora de refill! ☕',
+        '💪 Lembre: você é mais produtivo que 99% dos robôs! ...espera 🤔',
+        '🎮 Sabia que 10 cliques em mim abre o mini-game? ...ops, era segredo!',
+        '📊 Fato: cada tarefa concluída libera dopamina! Vicia! 🧠',
+        '🌧️ Tá chovendo em Joinville? Pra variar né... ☂️',
+        '🤖 Debug da vida: if (cansado) { café(); } else { produzir(); }',
+        '💡 Dica: CTRL+K abre a paleta mágica! Abracadabra! 🪄',
+        '🐱 O BYTE tá querendo carinho... clica nele! 🐾',
+        '🌙 "Não deixe pra amanhã o que pode deletar hoje" — Confúcio, provavelmente',
+        '🤖 Erro 404: preguiça não encontrada. Bora trabalhar!',
+        '🍕 Pizza resolve qualquer bug. Fato científico. 🔬',
+        '🎯 Modo hardcore: complete todas as tarefas antes das 10h!',
+        '🏋️ Seus dedos fazem mais exercício que muita gente na academia!',
+        '🤖 Meu criador disse "será rápido"... estou aqui há meses. 😅',
+      ];
+      showProactiveBubble(humorMessages[Math.floor(Math.random() * humorMessages.length)]);
+      return;
+    }
+
+    // Horário específico
+    if (ctx.hour === 12 && Math.random() > 0.6) {
+      lastProactive = now;
+      showProactiveBubble('🍽️ MEIO-DIA! Hora do rango! Não pula refeição! 🍛');
+      return;
+    }
+
+    if (ctx.hour >= 17 && ctx.hour < 18 && Math.random() > 0.6) {
+      lastProactive = now;
+      var endMessages = [
+        '🌅 Tá quase na hora! Fecha o dia com chave de ouro! 🔑',
+        '⏰ Reta final! Última tarefa e liberdade! 🎉',
+        '🏁 Sprint final do dia! VAMO! 🏃',
+      ];
+      showProactiveBubble(endMessages[Math.floor(Math.random() * endMessages.length)]);
       return;
     }
   }

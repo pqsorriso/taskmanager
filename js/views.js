@@ -125,7 +125,7 @@ const Views = (() => {
 
     tasks.forEach(t => {
       const card = document.createElement('div');
-      card.className = 'kanban-card';
+      card.className = 'kanban-card kc-' + t.priority;
       card.dataset.id = t.id;
       card.draggable = true;
 

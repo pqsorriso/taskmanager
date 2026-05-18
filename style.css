@@ -4002,3 +4002,56 @@ input[type="datetime-local"] {
   background: rgba(0,80,160,0.2);
   margin: 3px 8px;
 }
+
+/* ================================================================
+97. ANIMAÇÃO AO COMPLETAR TAREFA
+================================================================ */
+.task-row.completing {
+  animation: task-complete-anim 0.6s ease forwards;
+}
+
+@keyframes task-complete-anim {
+  0% { transform: scale(1); opacity: 1; }
+  30% { transform: scale(1.02); background: rgba(0,200,100,0.15); }
+  60% { transform: scale(1.01); }
+  100% { transform: scale(0.98); opacity: 0.7; }
+}
+
+.task-complete-sparkle {
+  position: absolute;
+  pointer-events: none;
+  font-size: 14px;
+  animation: sparkle-float 1s ease forwards;
+  z-index: 100;
+}
+
+@keyframes sparkle-float {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-30px) scale(1.5); }
+}
+
+/* ================================================================
+98. KANBAN MELHORADO — CORES POR PRIORIDADE
+================================================================ */
+.kanban-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.kanban-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.kanban-card.dragging {
+  opacity: 0.5;
+  transform: rotate(3deg);
+}
+
+.kanban-col-body.drag-over {
+  background: rgba(0,170,255,0.1);
+  border-color: rgba(0,170,255,0.4);
+}
+
+.kanban-card.kc-alta { border-left: 3px solid var(--pri-alta); }
+.kanban-card.kc-media { border-left: 3px solid var(--pri-media); }
+.kanban-card.kc-baixa { border-left: 3px solid var(--pri-baixa); }
