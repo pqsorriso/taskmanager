@@ -172,6 +172,11 @@
     <div class="search-bar">
       <span class="search-label">🔍</span>
       <input type="text" id="searchInput" placeholder="Buscar tarefas..." />
+      <div style="display:flex;gap:0;margin-left:auto">
+        <button class="view-btn active" data-view="list">☰ Lista</button>
+        <button class="view-btn" data-view="kanban">▦ Kanban</button>
+        <button class="view-btn" data-view="calendar">📅 Cal</button>
+      </div>
     </div>
 
     <!-- Sort Bar -->
@@ -214,13 +219,6 @@
       <h1>📋 FCEUX Task Manager — Lista de Tarefas</h1>
       <div class="ph-date" id="printDate"></div>
       <div class="ph-info" id="printInfo"></div>
-    </div>
-
-    <!-- View Buttons -->
-    <div class="view-bar">
-      <button class="view-btn active" data-view="list">☰ Lista</button>
-      <button class="view-btn" data-view="kanban">▦ Kanban</button>
-      <button class="view-btn" data-view="calendar">📅 Calendário</button>
     </div>
 
     <!-- Task List -->
