@@ -16,7 +16,7 @@ var Weekly = (function() {
     var body = document.getElementById('weeklyBody');
     if (!body) return;
 
-    var tasks = typeof TaskManager !== 'undefined' ? TaskManager.getAll() : [];
+    var tasks = typeof TaskManager !== 'undefined' ? (TaskManager.getAllWithArchive ? TaskManager.getAllWithArchive() : TaskManager.getAll()) : [];
     var today = new Date();
     var todayStr = today.toISOString().slice(0, 10);
 

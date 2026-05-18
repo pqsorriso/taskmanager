@@ -1298,6 +1298,16 @@ const TaskManager = (() => {
     getAll: getAll,
     moveToProject: moveToProject,
     getSelectedId: () => selectedId,
-    getTaskById: (id) => tasks.find(t => t.id === id)
+    getTaskById: (id) => tasks.find(t => t.id === id),
+    getAllWithArchive: function() {
+      var all = tasks.slice();
+      if (typeof Archive !== 'undefined') {
+        var archived = Archive.getArchive();
+        if (archived && archived.length) {
+          all = all.concat(archived);
+        }
+      }
+      return all;
+    }
   };
 })();

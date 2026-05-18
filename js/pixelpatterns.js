@@ -19,7 +19,7 @@ var PixelPatterns = (function() {
 
   // === ANALISAR PADRÕES ===
   function analyze() {
-    var tasks = typeof TaskManager !== 'undefined' ? TaskManager.getAll() : [];
+    var tasks = typeof TaskManager !== 'undefined' ? (TaskManager.getAllWithArchive ? TaskManager.getAllWithArchive() : TaskManager.getAll()) : [];
     var doneTasks = tasks.filter(function(t) { return t.done; });
     if (doneTasks.length < 5) return; // Precisa de dados mínimos
 

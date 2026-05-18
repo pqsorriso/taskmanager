@@ -601,7 +601,7 @@ const TaskUI = (() => {
   // === STATISTICS ===
   // ============================================
   function openStats() {
-    const tasks = TaskManager.getAll();
+    const tasks = typeof TaskManager.getAllWithArchive === 'function' ? TaskManager.getAllWithArchive() : TaskManager.getAll();
     const total = tasks.length;
     const done = tasks.filter(t => t.done).length;
     const pending = tasks.filter(t => !t.done).length;
