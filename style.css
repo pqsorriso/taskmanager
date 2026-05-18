@@ -393,6 +393,7 @@ body::after {
 .kanban-card.dragging { opacity: 0.4; }
 .kanban-col-body.drag-over { background: rgba(0,100,200,0.1); border: 1px dashed rgba(0,170,255,0.4); border-radius: 4px; }
 .view-toggle { display: flex; gap: 2px; margin-left: 6px; }
+.view-bar { padding: 4px 12px; display: flex; gap: 0; align-items: center; flex-shrink: 0; }
 .view-btn { background: none; border: 1px solid var(--border-light); color: #005588; font-family: var(--font-main); font-size: 11px; padding: 2px 8px; cursor: pointer; transition: all 0.15s; }
 .view-btn:first-child { border-radius: 3px 0 0 3px; }
 .view-btn:last-child { border-radius: 0 3px 3px 0; }
