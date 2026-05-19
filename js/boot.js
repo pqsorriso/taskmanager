@@ -24,7 +24,7 @@ const BootScreen = (() => {
   }
 
   const modules = [
-    { text: 'FCEUX Task Manager BIOS v2.6.6', check: null },
+    { text: 'FCEUX Task Manager BIOS v3.0', check: null },
     { text: 'Copyright (C) 2026 Gustavo Nogueira — GM Joinville', check: null },
     { text: '', check: null },
     { text: 'Verificando memória...                    640K', check: null },

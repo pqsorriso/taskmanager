@@ -428,7 +428,7 @@ var Outlook = (function() {
       html += '</div>';
     }
 
-    html += '<div class="footer">FCEUX Task Manager v2.6.6 — by Gustavo Nogueira — pqsorriso.github.io/TaskManager</div>';
+    html += '<div class="footer">FCEUX Task Manager v3.0 — by Gustavo Nogueira — pqsorriso.github.io/TaskManager</div>';
     html += '</body></html>';
 
     win.document.write(html);

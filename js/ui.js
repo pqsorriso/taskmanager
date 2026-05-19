@@ -1010,7 +1010,7 @@ const TaskUI = (() => {
       if (typeof Notifications !== 'undefined') {
         Notifications.showToast(
           '👋 BEM-VINDO!',
-          'FCEUX Task Manager v2.6.6 — Pressione F1 para ver o Help completo!',
+          'FCEUX Task Manager v3.0 — Pressione F1 para ver o Help completo!',
           'info',
           8000
         );

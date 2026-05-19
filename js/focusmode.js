@@ -86,7 +86,7 @@ const FocusMode = (() => {
     overlay.classList.remove('visible');
     hideTimePicker();
     if (!running) {
-      document.title = 'FCEUX Task Manager v2.6.6';
+      document.title = 'FCEUX Task Manager v3.0';
     }
   }
 
@@ -266,7 +266,7 @@ const FocusMode = (() => {
     document.getElementById('focusStartBtn').textContent = '▶ INICIAR';
     document.getElementById('focusPauseBtn').textContent = '⏸ PAUSAR';
     updateDisplay();
-    document.title = 'FCEUX Task Manager v2.6.6';
+    document.title = 'FCEUX Task Manager v3.0';
     showTimePicker();
   }
 

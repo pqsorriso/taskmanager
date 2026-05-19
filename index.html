@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FCEUX Task Manager v2.6.6</title>
+  <title>FCEUX Task Manager v3.0</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAATtJREFUWEftlrENwjAQRf8FKBiACRiAAViAAViAAViAAViAEVgACigooIACiiggEuXIke27c2LJBSlS+e7/e+c/O4n6fJKe8xcQ8CfAXwG+BRDyJsBrAZwPQiCfYjcyDwF7AJYAXE9RfALg5BTFZwBunnV7APsnxSbr6RmAu0cAnwVwA0DsK8UNgKUAF08BnNyj2AZwBcBj6e17AHYAPHkKYOcUxR6Ac3t0/xjAnlOAI3t03xjAiZLiGMDxKYpd+8cA9kkBBCKKcpZSzq2dAjj6AeDYHt1fAHBjim4fwLEpurMA58YUPVn/BHBgiu4qwKkhRT8HcGRI0Z8BXBhS9A0A+6bo/g6AMxfAef0QwLkLIN8aJBcB3LoA8q0F+HcBFF0AV/fo/gWAmwvg1h7d/wDwLYCHtuNnAD4DCPkGfB+kj9hLTvMAAAAASUVORK5CYII=" />
@@ -15,7 +15,7 @@
 
   <!-- LOADING SCREEN -->
   <div class="loading-screen" id="loadingScreen">
-    <div class="boot-header">FCEUX TASK MANAGER v2.6.6 BIOS</div>
+    <div class="boot-header">FCEUX TASK MANAGER v3.0 BIOS</div>
     <div class="boot-log" id="bootLog"></div>
     <div class="progress-wrap" id="progressWrap">
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
@@ -31,7 +31,7 @@
     <div class="title-bar">
       <div class="title">
         <div class="ico"></div>
-        FCEUX Task Manager v2.6.6
+        FCEUX Task Manager v3.0
       </div>
       <div class="win-buttons">
         <button class="win-btn" id="winMin" title="Minimizar">─</button>
@@ -226,7 +226,7 @@
 
     <!-- Print Footer -->
     <div class="print-footer" id="printFooter">
-      FCEUX Task Manager v2.6.6 — by Gustavo Nogueira — GM Joinville
+      FCEUX Task Manager v3.0 — by Gustavo Nogueira — GM Joinville
     </div>
 
     <!-- Kanban Board -->
@@ -323,7 +323,7 @@
     <div class="status-bar">
       <span>/USR/LOCAL/TASKS/GUSTAVO/</span>
       <span>by Gustavo Nogueira — GM Joinville</span>
-      <span>v2.6.6</span>
+      <span>v3.0</span>
     </div>
 
   </div><!-- END app-wrapper -->
@@ -336,11 +336,11 @@
   <div class="modal-overlay" id="helpModal">
     <div class="modal-window">
       <div class="modal-titlebar">
-        <span>📖 Help — FCEUX Task Manager v2.6.6</span>
+        <span>📖 Help — FCEUX Task Manager v3.0</span>
         <button class="modal-close-btn" id="helpCloseX">✕</button>
       </div>
       <div class="modal-body">
-        <p><b>FCEUX Task Manager v2.6.6</b><br>95+ features · 33 módulos · 0 dependências<br>by Gustavo Nogueira — GM Joinville</p>
+        <p><b>FCEUX Task Manager v3.0</b><br>140+ features · 49 módulos · 8 temas · 0 dependências<br>by Gustavo Nogueira — GM Joinville</p>
 
         <h3>⌨️ Atalhos de Teclado</h3>
         <table>
@@ -1136,11 +1136,11 @@
           <div class="config-section-title">💾 DADOS</div>
           <div class="config-row"><label>Banco:</label><span style="color:var(--text-green)">IndexedDB (local)</span></div>
           <div class="config-row">
-            <button class="toolbar-btn" onclick="TaskManager.exportJSON()">📤 Exportar</button>
-            <button class="toolbar-btn" onclick="document.getElementById('importInput').click()">📥 Importar</button>
+           <button class="toolbar-btn" title="Exportar dados JSON" onclick="TaskManager.exportJSON()">📤 Exportar</button>
+           <button class="toolbar-btn" title="Importar dados JSON" onclick="document.getElementById('importInput').click()">📥 Importar</button>
           </div>
           <div class="config-row">
-            <button class="toolbar-btn" style="color:#ff4444;border-color:rgba(255,60,60,0.3)" id="cfgClearAll">🗑 Limpar TUDO</button>
+           <button class="toolbar-btn" title="Apagar TODOS os dados" style="color:#ff4444;border-color:rgba(255,60,60,0.3)" id="cfgClearAll">🗑 Limpar TUDO</button>
           </div>
         </div>
       </div>
@@ -1359,7 +1359,7 @@
       <div class="about-header">
         <div class="about-logo">🤖</div>
         <div class="about-title">FCEUX Task Manager</div>
-        <div class="about-version">v2.6.6 — Build 2026.04</div>
+        <div class="about-version">v3.0 — Build 2026.04</div>
       </div>
       <div class="about-body">
         <div class="about-info">

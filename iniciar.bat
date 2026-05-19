@@ -1,8 +1,8 @@
 @echo off
-title FCEUX Task Manager v2.6.6
+title FCEUX Task Manager v3.0
 echo.
 echo  ========================================
-echo    FCEUX Task Manager v2.6.6
+echo    FCEUX Task Manager v3.0
 echo    Servidor local iniciando na porta 8000
 echo  ========================================
 echo.

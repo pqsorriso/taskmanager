@@ -269,7 +269,7 @@ const Pomodoro = (() => {
     document.getElementById('pomoStart').textContent = '▶ INICIAR';
     document.getElementById('pomoPause').textContent = '⏸ PAUSAR';
     updateDisplay();
-    document.title = 'FCEUX Task Manager v2.6.6';
+    document.title = 'FCEUX Task Manager v3.0';
     hideMini();
   }
 

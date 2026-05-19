@@ -14,7 +14,7 @@ const Backup = (() => {
       const backup = {
         date: new Date().toISOString(),
         tasks: tasks,
-        version: 'v2.6.6'
+        version: 'v3.0'
       };
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(backup));

@@ -253,7 +253,7 @@ var Notifications = (function () {
       if (isFirstVisit) {
         showToast(
           '👋 BEM-VINDO',
-          'FCEUX Task Manager v2.6.6 — Gerencie suas tarefas com estilo!',
+          'FCEUX Task Manager v3.0 — Gerencie suas tarefas com estilo!',
           'success',
           6000
         );
