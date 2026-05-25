@@ -51,10 +51,15 @@ const DashBar = (() => {
     const today = getTodayStr();
 
     // Tarefas de hoje (criadas hoje ou com vencimento hoje)
-    const todayTasks = tasks.filter(t =>
-      (t.dueDate === today) ||
-      (t.createdAt && t.createdAt.startsWith(today))
-    );
+    const todayTasks = tasks.filter(function(t) {
+      // Vence hoje
+      if (t.dueDate === today) return true;
+      // Criada hoje SEM data de vencimento
+      if (!t.dueDate && t.createdAt && t.createdAt.startsWith(today)) return true;
+      // Concluída hoje
+      if (t.completedAt && t.completedAt.startsWith(today)) return true;
+      return false;
+    });
 
     // Remover duplicatas
     const uniqueIds = new Set();
