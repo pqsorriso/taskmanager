@@ -2,7 +2,7 @@
  * sw.js — Service Worker para PWA
  * Versão com cache atualizado automaticamente
  */
-const CACHE_VERSION = 'v10';
+const CACHE_VERSION = 'v11';
 const CACHE_NAME = 'fceux-task-' + CACHE_VERSION;
 const ASSETS = [
   './',
