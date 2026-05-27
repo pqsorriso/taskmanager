@@ -26,6 +26,8 @@ const Config = (() => {
     sounds: true,
     particles: true,
     tooltips: true,
+    matrix: true,
+    matrixTime: 5,
   };
 
   function load() {
@@ -82,6 +84,10 @@ const Config = (() => {
     setToggle('cfgSounds', settings.sounds);
     setToggle('cfgParticles', settings.particles);
     setToggle('cfgTooltips', settings.tooltips);
+    setToggle('cfgMatrix', settings.matrix);
+    var cfgMatrixTime = document.getElementById('cfgMatrixTime');
+    if (cfgMatrixTime) cfgMatrixTime.value = settings.matrixTime;
+
 
     // Tema
     const currentTheme = typeof Themes !== 'undefined' ? Themes.getCurrent() : 'dark';
@@ -148,6 +154,15 @@ const Config = (() => {
     settings.sounds = getToggle('cfgSounds');
     settings.particles = getToggle('cfgParticles');
     settings.tooltips = getToggle('cfgTooltips');
+    settings.matrix = getToggle('cfgMatrix');
+    settings.matrixTime = Number(document.getElementById('cfgMatrixTime').value) || 5;
+
+    // Atualizar Matrix
+    if (typeof Matrix !== 'undefined') {
+      if (settings.matrix) Matrix.enable(settings.matrixTime);
+      else Matrix.disable();
+    }
+
 
     // Aplicar partículas
     if (typeof Particles !== 'undefined') {

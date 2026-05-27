@@ -1,6 +1,7 @@
 /**
  * matrix.js — Screensaver estilo Matrix
- * Ativa após 5 minutos ocioso ou pelo comando /matrix
+ * Ativa após X minutos ocioso ou pelo comando /matrix
+ * Configurável: ativar/desativar + tempo de inatividade
  */
 const Matrix = (() => {
   const screen = document.getElementById('matrixScreen');
@@ -8,10 +9,11 @@ const Matrix = (() => {
   const ctx = canvas.getContext('2d');
 
   let active = false;
+  let enabled = true;
   let animFrame = null;
   let idleTimer = null;
   let columns = [];
-  const IDLE_TIME = 5 * 60 * 1000; // 5 minutos
+  let idleTime = 5 * 60 * 1000;
 
   const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -22,10 +24,10 @@ const Matrix = (() => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const fontSize = 14;
-    const colCount = Math.floor(canvas.width / fontSize);
+    var fontSize = 14;
+    var colCount = Math.floor(canvas.width / fontSize);
     columns = [];
-    for (let i = 0; i < colCount; i++) {
+    for (var i = 0; i < colCount; i++) {
       columns[i] = Math.floor(Math.random() * -canvas.height / fontSize);
     }
 
@@ -40,12 +42,11 @@ const Matrix = (() => {
     ctx.fillStyle = '#0f0';
     ctx.font = fontSize + 'px monospace';
 
-    for (let i = 0; i < columns.length; i++) {
-      const char = chars[Math.floor(Math.random() * chars.length)];
-      const x = i * fontSize;
-      const y = columns[i] * fontSize;
+    for (var i = 0; i < columns.length; i++) {
+      var char = chars[Math.floor(Math.random() * chars.length)];
+      var x = i * fontSize;
+      var y = columns[i] * fontSize;
 
-      // Primeiro caractere mais brilhante
       if (Math.random() > 0.98) {
         ctx.fillStyle = '#fff';
       } else if (Math.random() > 0.9) {
@@ -63,7 +64,7 @@ const Matrix = (() => {
       columns[i]++;
     }
 
-    animFrame = requestAnimationFrame(() => draw(fontSize));
+    animFrame = requestAnimationFrame(function() { draw(fontSize); });
   }
 
   function stop() {
@@ -77,18 +78,48 @@ const Matrix = (() => {
 
   function resetIdleTimer() {
     if (idleTimer) clearTimeout(idleTimer);
-    idleTimer = setTimeout(() => {
-      // Não ativar se tem pomodoro rodando ou música tocando
+    if (!enabled) return;
+    idleTimer = setTimeout(function() {
       if (typeof Pomodoro !== 'undefined' && document.title.includes('🍅')) return;
-    // (música removida)
+      if (typeof FocusMode !== 'undefined' && document.querySelector('.focus-overlay.visible')) return;
       start();
-    }, IDLE_TIME);
+    }, idleTime);
   }
 
+  function enable(minutes) {
+    enabled = true;
+    idleTime = (minutes || 5) * 60 * 1000;
+    resetIdleTimer();
+  }
+
+  function disable() {
+    enabled = false;
+    if (idleTimer) clearTimeout(idleTimer);
+    stop();
+  }
+
+  function setIdleMinutes(minutes) {
+    idleTime = Math.max(1, Math.min(60, minutes)) * 60 * 1000;
+    resetIdleTimer();
+  }
+
+  function isEnabled() { return enabled; }
+
   function init() {
-    // Parar ao clicar ou pressionar tecla
+    // Carregar config
+    if (typeof Config !== 'undefined') {
+      var matrixEnabled = Config.get('matrix');
+      if (matrixEnabled === false) {
+        enabled = false;
+      }
+      var matrixMin = Config.get('matrixTime');
+      if (matrixMin && matrixMin > 0) {
+        idleTime = matrixMin * 60 * 1000;
+      }
+    }
+
     screen.addEventListener('click', stop);
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', function(e) {
       if (active) {
         e.preventDefault();
         stop();
@@ -96,23 +127,29 @@ const Matrix = (() => {
       }
     });
 
-    // Resetar timer de ociosidade com atividade
-    ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
-      document.addEventListener(evt, () => {
+    ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach(function(evt) {
+      document.addEventListener(evt, function() {
         if (!active) resetIdleTimer();
       });
     });
 
-    // Resize
-    window.addEventListener('resize', () => {
+    window.addEventListener('resize', function() {
       if (active) {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
     });
 
-    resetIdleTimer();
+    if (enabled) resetIdleTimer();
   }
 
-  return { init, start, stop };
+  return {
+    init: init,
+    start: start,
+    stop: stop,
+    enable: enable,
+    disable: disable,
+    setIdleMinutes: setIdleMinutes,
+    isEnabled: isEnabled
+  };
 })();
